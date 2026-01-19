@@ -6,8 +6,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PublicController;
 
 // Authentication Routes
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
+Route::get('/mlebu', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/mlebu', [LoginController::class, 'login']);
 Route::post('/keluar', [LoginController::class, 'logout'])->name('logout');
 
 // Public Routes
