@@ -163,6 +163,55 @@
             padding: 40px;
         }
 
+        /* Responsive Admin */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: fixed;
+                left: -260px;
+                transition: left 0.3s ease;
+                box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .header {
+                padding: 0 20px;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .header-user .info {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid-dashboard {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .header-brand nav {
+                display: none !important;
+            }
+        }
+
         /* UI Elements */
         .card {
             background: var(--card-bg);
@@ -250,6 +299,18 @@
             padding: 15px;
             border-bottom: 1px solid var(--border);
             vertical-align: middle;
+        }
+
+        /* Responsive Table */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+        }
+
+        table {
+            min-width: 800px;
         }
 
         .alert {
@@ -384,6 +445,9 @@
     <main class="main">
         <header class="header">
             <div class="header-brand">
+                <button class="mobile-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="dot"></div>
                 <nav style="font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px;">
                     <span style="color: var(--text-muted);">Admin</span>
@@ -401,6 +465,9 @@
             </div>
 
             <div class="header-user">
+                <a href="/" target="_blank" title="Lihat Website" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #f8fafc; color: var(--text-muted); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='var(--primary)'; this.style.color='#fff';" onmouseout="this.style.background='#f8fafc'; this.style.color='var(--text-muted)';">
+                    <i class="fas fa-globe"></i>
+                </a>
                 <div class="info">
                     <h4>Hi {{ auth()->user()?->nama ?? 'Administrator' }}</h4>
                     <span>{{ auth()->user()?->email }}</span>
@@ -431,7 +498,24 @@
         </section>
     </main>
 
+    <div id="sidebar-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9;"></div>
+
     <script>
+        // Sidebar Toggle Mobile
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('show');
+            overlay.style.display = sidebar.classList.contains('show') ? 'block' : 'none';
+        }
+
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+        }
+
         // Jam Realtime
         const clockElement = document.getElementById('realtime-clock');
         if (clockElement) {

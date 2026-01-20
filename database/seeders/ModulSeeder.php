@@ -19,6 +19,10 @@ class ModulSeeder extends Seeder
             ['nama' => 'Manajemen Menu', 'slug' => 'menu', 'versi' => '1.0.0', 'deskripsi' => 'Modul untuk mengelola navigasi menu pada website.', 'aktif' => true],
             ['nama' => 'Manajemen Pengguna', 'slug' => 'pengguna', 'versi' => '1.0.0', 'deskripsi' => 'Modul untuk mengelola hak akses dan pengguna.', 'aktif' => true],
             ['nama' => 'Statistik', 'slug' => 'statistik', 'versi' => '1.0.0', 'deskripsi' => 'Modul untuk mencatat statistik pengunjung.', 'aktif' => true],
+            ['nama' => 'Komentar', 'slug' => 'komentar', 'versi' => '1.0.0', 'deskripsi' => 'Modul untuk mengelola komentar.', 'aktif' => true],
+            ['nama' => 'Iklan', 'slug' => 'iklan', 'versi' => '1.0.0', 'deskripsi' => 'Modul untuk mengelola iklan.', 'aktif' => true],
+            ['nama' => 'Kontak', 'slug' => 'kontak', 'versi' => '1.0.0', 'deskripsi' => 'Modul untuk mengelola pesan kontak.', 'aktif' => true],
+            ['nama' => 'SEO', 'slug' => 'seo', 'versi' => '1.0.0', 'deskripsi' => 'Modul untuk optimasi SEO.', 'aktif' => true],
         ];
 
         foreach ($modules as $mod) {

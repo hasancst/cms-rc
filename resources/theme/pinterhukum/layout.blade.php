@@ -89,7 +89,8 @@
         .main-nav .container {
             display: flex;
             align-items: center;
-            gap: 40px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .logo {
@@ -486,11 +487,80 @@
             .footer-grid { grid-template-columns: 1fr 1fr; }
         }
 
+        /* Mobile Nav */
+        .mobile-nav-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        @media (max-width: 992px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                height: 100vh;
+                background: #fff;
+                flex-direction: column;
+                padding: 100px 30px;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+                transition: right 0.3s ease;
+                z-index: 1001;
+                gap: 5px;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links li a {
+                padding: 15px 0;
+                border-bottom: 1px solid #f1f5f9;
+                display: block;
+                width: 100%;
+            }
+
+            .submenu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                padding: 0 0 0 20px;
+                display: none;
+                margin-bottom: 15px;
+            }
+
+            .nav-links li.active .submenu {
+                display: block;
+            }
+
+            .main-nav .container {
+                justify-content: space-between;
+                gap: 15px;
+            }
+
+            .nav-links li a::after {
+                display: none;
+            }
+        }
+
         @media (max-width: 600px) {
-            .nav-links { display: none; }
             .hero-side { grid-template-columns: 1fr; }
             .post-card { flex-direction: column; }
             .post-card img { width: 100%; }
+            .logo span { font-size: 1.2rem; }
         }
     </style>
     @yield('styles')
@@ -525,9 +595,12 @@
                         </li>
                     @endforeach
                 </ul>
-                <div style="margin-left: auto;">
+                <div style="display: flex; align-items: center; gap: 5px; margin-left: auto;">
                     <div class="search-btn-trigger" id="toggle-search">
                         <i class="fas fa-search"></i>
+                    </div>
+                    <div class="mobile-nav-toggle" id="mobile-menu-toggle">
+                        <i class="fas fa-bars"></i>
                     </div>
                 </div>
             </div>
@@ -611,8 +684,36 @@
         </div>
     </footer>
 
+    <div id="mobile-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000;"></div>
+
     @yield('scripts')
     <script>
+        // Mobile Menu Logic
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const hasSubmenu = document.querySelectorAll('.has-submenu > a');
+
+        function toggleMobileMenu() {
+            navLinks.classList.toggle('active');
+            mobileOverlay.style.display = navLinks.classList.contains('active') ? 'block' : 'none';
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', toggleMobileMenu);
+            mobileOverlay.addEventListener('click', toggleMobileMenu);
+        }
+
+        hasSubmenu.forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (window.innerWidth <= 992) {
+                    e.preventDefault();
+                    this.parentElement.classList.toggle('active');
+                }
+            });
+        });
+
         // Search Overlay Logic
         const searchTrigger = document.getElementById('toggle-search');
         const searchOverlay = document.getElementById('search-overlay');

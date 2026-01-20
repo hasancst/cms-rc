@@ -33,12 +33,12 @@
 @endif
 
 <div class="container">
-<div class="main-content">
+<div class="main-content" style="margin-top: 40px;">
     <main>
         @if($beritaList->count() > 0)
             <!-- Featured Post in Category (First Item) -->
             @php $featured = $beritaList->shift(); @endphp
-            <div class="featured-card-premium" style="margin-bottom: 40px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); background: #fff;">
+            <div class="featured-card-premium" style="margin-top: 20px; margin-bottom: 40px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); background: #fff;">
                 <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 0;">
                     <div style="height: 400px; overflow: hidden; position: relative;">
                          <img src="{{ $featured->gambar_utama ? (str_starts_with($featured->gambar_utama, 'http') ? $featured->gambar_utama : asset('storage/' . $featured->gambar_utama)) : asset('theme/pinterhukum/img/default.jpg') }}" 
@@ -112,27 +112,42 @@
 
     <aside>
         <div class="widget">
-            <h4 class="widget-title">Artikel Populer</h4>
-            <ul class="popular-list">
-                @foreach($artikelPopuler as $idx => $pop)
-                <li class="popular-item">
-                    <span class="number">{{ $idx + 1 }}</span>
+            <h4 class="widget-title">Top News</h4>
+            <ul style="list-style: none; padding: 0;">
+                @foreach($topBerita as $top)
+                <li style="display: flex; gap: 12px; margin-bottom: 20px; align-items: flex-start;">
+                    <div style="width: 80px; height: 55px; min-width: 80px; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <img src="{{ $top->gambar_utama ? (str_starts_with($top->gambar_utama, 'http') ? $top->gambar_utama : asset('storage/' . $top->gambar_utama)) : asset('theme/pinterhukum/img/default.jpg') }}" 
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
                     <div>
-                        <a href="/artikel/{{ $pop->slug }}" class="popular-link">{{ $pop->judul }}</a>
-                        <small style="color: var(--text-muted);">{{ $pop->created_at->format('d M Y') }}</small>
+                        <a href="/berita/{{ $top->slug }}" style="text-decoration: none; color: var(--text-main); font-size: 0.9rem; font-weight: 700; line-height: 1.3; display: block; margin-bottom: 3px;">{{ Str::limit($top->judul, 45) }}</a>
+                        <small style="color: var(--text-muted); font-size: 0.75rem;">{{ $top->created_at->format('d M Y') }}</small>
                     </div>
                 </li>
                 @endforeach
             </ul>
         </div>
         
-        <div class="widget">
-            <h4 class="widget-title">Berlangganan</h4>
-            <div style="padding: 20px; background: #f8fafc; border-radius: 12px; border: 1px solid var(--border);">
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">Dapatkan pembaruan berita hukum terbaru langsung di email Anda.</p>
-                <form onsubmit="event.preventDefault(); alert('Terima kasih telah berlangganan!');">
-                    <input type="email" placeholder="Email Anda" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
-                    <button class="btn" style="width: 100%; justify-content: center;">Berlangganan</button>
+        <div class="widget" style="background: linear-gradient(135deg, #014A7A 0%, #002D4B 100%); color: #fff; border: none;">
+            <h4 class="widget-title" style="color: #fff; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">Berlangganan</h4>
+            <div style="padding: 5px;">
+                <div style="display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 50%; margin-bottom: 20px;">
+                    <i class="fas fa-paper-plane" style="font-size: 1.2rem; color: #fff;"></i>
+                </div>
+                <h5 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: #fff;">Update Hukum Terbaru</h5>
+                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.8); margin-bottom: 20px; line-height: 1.5;">Dapatkan pembaruan berita dan analisis hukum terpercaya langsung di email Anda setiap minggu.</p>
+                <form onsubmit="event.preventDefault(); alert('Terima kasih telah berlangganan!');" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="position: relative;">
+                        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 0.8rem;">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <input type="email" placeholder="Alamat Email Anda" required style="width: 100%; padding: 12px 12px 12px 35px; border: none; border-radius: 8px; font-size: 0.9rem; outline: none; background: #fff;">
+                    </div>
+                    <button class="btn" style="width: 100%; justify-content: center; background: #fbbf24; color: #000; border: none; font-weight: 800; padding: 12px; border-radius: 8px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);">
+                        SAYA MAU LANGGANAN
+                    </button>
+                    <p style="font-size: 0.7rem; color: rgba(255,255,255,0.5); text-align: center; margin-top: 5px;">*Kami menghargai privasi Anda</p>
                 </form>
             </div>
         </div>

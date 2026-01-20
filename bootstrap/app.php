@@ -12,6 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo('/mlebu');
+        $middleware->trustProxies(at: '*');
+        $middleware->alias([
+            'cek_izin' => \App\Http\Middleware\CekIzin::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -47,6 +47,10 @@ class ThemeManager
             
             // Tambahkan ke main search path agar bisa override views bawaan
             app('view.finder')->prependLocation($pathTema);
+        } else {
+            // Fallback: Register the first available theme or a generic path to avoid 500
+            $fallback = resource_path('views');
+            View::prependNamespace('tema', $fallback);
         }
     }
 }

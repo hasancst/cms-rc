@@ -95,6 +95,7 @@
 
 @section('scripts')
 <script>
+
     const ctx = document.getElementById('visitorChart').getContext('2d');
     const visitorChart = new Chart(ctx, {
         type: 'line',

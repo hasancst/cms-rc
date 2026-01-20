@@ -2,10 +2,50 @@
 
 @section('judul', 'Manajemen Menu')
 
+@section('styles')
+<style>
+    .sortable-ghost {
+        opacity: 0.4;
+        background-color: var(--primary-light) !important;
+        border: 2px dashed var(--primary) !important;
+    }
+    .menu-item-wrapper {
+        cursor: move;
+        transition: all 0.2s;
+    }
+    .menu-item-wrapper:hover {
+        border-color: var(--primary) !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
+    }
+    
+    .menu-container {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+    }
+
+    .form-card {
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+    }
+
+    @media (max-width: 992px) {
+        .menu-container {
+            grid-template-columns: 1fr;
+        }
+        .form-card {
+            position: relative;
+            top: 0;
+        }
+    }
+</style>
+@endsection
+
 @section('konten')
-<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+<div class="menu-container">
     <!-- Form Tambah/Edit -->
-    <div class="card" style="height: fit-content; position: sticky; top: 100px;">
+    <div class="card form-card">
         <h3 id="form-title">Tambah Menu Baru</h3>
         <form action="/admin/menu" method="POST" id="form-menu">
             @csrf
@@ -100,7 +140,7 @@
     </div>
 
     <!-- Struktur Menu -->
-    <div>
+    <div id="menu-structure">
         <!-- Section: Header Menu -->
         <div class="card">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
@@ -109,7 +149,7 @@
                 <span class="badge" style="background: #ebf1ff; color: #4e73df; font-weight: 800;">HEADER</span>
             </div>
             
-            <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+            <div id="header-menu-list" style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border); min-height: 50px;">
                 @forelse($headerMenus as $menu)
                     @include('menu::item', ['item' => $menu])
                 @empty
@@ -126,7 +166,7 @@
                 <span class="badge" style="background: #fff7ed; color: #c2410c; font-weight: 800;">FOOTER</span>
             </div>
             
-            <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+            <div id="footer-menu-list" style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border); min-height: 50px;">
                 @forelse($footerMenus as $menu)
                     @include('menu::item', ['item' => $menu])
                 @empty
@@ -136,11 +176,88 @@
         </div>
     </div>
 </div>
+@endsection
 
+@section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 <script>
     // Data for dynamic select
     const headerParents = @json($headerMenus->map(fn($m) => ['id' => $m->id, 'label' => $m->label]));
     const footerParents = @json($footerMenus->map(fn($m) => ['id' => $m->id, 'label' => $m->label]));
+
+    // Sorting Logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const headerList = document.getElementById('header-menu-list');
+        const footerList = document.getElementById('footer-menu-list');
+
+        if (headerList) {
+            new Sortable(headerList, {
+                animation: 150,
+                handle: '.fa-grip-vertical',
+                ghostClass: 'sortable-ghost',
+                onEnd: function() {
+                    updateOrder('header');
+                }
+            });
+        }
+
+        if (footerList) {
+            new Sortable(footerList, {
+                animation: 150,
+                handle: '.fa-grip-vertical',
+                ghostClass: 'sortable-ghost',
+                onEnd: function() {
+                    updateOrder('footer');
+                }
+            });
+        }
+    });
+
+    async function updateOrder(posisi) {
+        const list = document.getElementById(posisi + '-menu-list');
+        const items = list.querySelectorAll(':scope > .menu-item-wrapper');
+        const orders = {};
+        
+        items.forEach((item, index) => {
+            const id = item.getAttribute('data-id');
+            if (id) {
+                orders[id] = index + 1;
+            }
+        });
+
+        if (Object.keys(orders).length === 0) return;
+
+        // Visual feedback
+        list.style.opacity = '0.5';
+        list.style.pointerEvents = 'none';
+
+        try {
+            const response = await fetch('/admin/menu/urutan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ urutan: orders })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                console.log('Order updated mapping:', orders);
+            } else {
+                throw new Error(data.message || 'Gagal menyimpan urutan');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Gagal: ' + error.message);
+        } finally {
+            list.style.opacity = '1';
+            list.style.pointerEvents = 'auto';
+        }
+    }
 
     function updateParentOptions() {
         const posisi = document.getElementById('posisi_menu').value;

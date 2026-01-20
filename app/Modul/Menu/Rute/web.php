@@ -8,5 +8,5 @@ Route::middleware(['web', 'auth'])->prefix('admin/menu')->group(function () {
     Route::post('/', [MenuController::class, 'simpan']);
     Route::post('/ubah/{id}', [MenuController::class, 'perbarui']);
     Route::delete('/hapus/{id}', [MenuController::class, 'hapus']);
-    Route::post('/urutan', [MenuController::class, 'urukan']);
+    Route::post('/urutan', [MenuController::class, 'urutan']);
 });

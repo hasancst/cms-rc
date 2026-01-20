@@ -15,7 +15,6 @@ class VideoSeeder extends Seeder
         $videos = [
             [
                 'judul' => 'Mengenal Keamanan Siber di Era Digital',
-                'slug' => 'mengenal-keamanan-siber-di-era-digital',
                 'url' => 'https://www.youtube.com/watch?v=66zTAsL69pQ',
                 'keterangan' => 'Video edukasi mengenai pentingnya menjaga data pribadi dan keamanan perangkat di dunia maya.',
                 'aktif' => true,
@@ -23,7 +22,6 @@ class VideoSeeder extends Seeder
             ],
             [
                 'judul' => 'Aspek Hukum Transaksi Elektronik',
-                'slug' => 'aspek-hukum-transaksi-elektronik',
                 'url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 'keterangan' => 'Memahami UU ITE dan bagaimana hukum melindungi konsumen dalam transaksi online.',
                 'aktif' => true,
@@ -33,7 +31,7 @@ class VideoSeeder extends Seeder
 
         foreach ($videos as $video) {
             \DB::table('video')->updateOrInsert(
-                ['slug' => $video['slug']],
+                ['url' => $video['url']],
                 array_merge($video, ['created_at' => now(), 'updated_at' => now()])
             );
         }

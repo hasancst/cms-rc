@@ -41,7 +41,7 @@
             <textarea name="keterangan" id="keterangan" class="form-control" rows="3">{{ old('keterangan') }}</textarea>
         </div>
 
-        <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
             <input type="checkbox" name="unggulan" id="unggulan" value="1">
             <label for="unggulan" style="margin-bottom: 0;">Jadikan Video Unggulan</label>
         </div>
@@ -52,7 +52,9 @@
         </div>
     </form>
 </div>
+@endsection
 
+@section('scripts')
 <script>
     document.getElementById('btn-fetch').addEventListener('click', function() {
         const url = document.getElementById('url').value;
@@ -72,18 +74,17 @@
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
         btn.disabled = true;
 
-        // Use oEmbed to fetch data
-        fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`)
+        // Use Internal Proxy to fetch data (Avoid CORS issues)
+        const fetchUrl = "{{ url('/admin/video/fetch') }}?url=" + encodeURIComponent(url);
+        fetch(fetchUrl)
             .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) throw new Error('Data tidak ditemukan atau URL tidak valid');
                 return response.json();
             })
             .then(data => {
                 if (data.title) {
                     document.getElementById('judul').value = data.title;
                     
-                    // Youtube oEmbed does not return the full video description.
-                    // We will generate a default description using available data.
                     let desc = `${data.title}`;
                     if (data.author_name) {
                         desc += `\n\nChannel: ${data.author_name}`;

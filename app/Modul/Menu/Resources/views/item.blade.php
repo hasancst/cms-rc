@@ -1,4 +1,4 @@
-<div style="background: #fff; padding: 15px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+<div class="menu-item-wrapper" data-id="{{ $item->id }}" style="background: #fff; padding: 15px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; align-items: center; gap: 10px;">
             <i class="fas fa-grip-vertical" style="color: #cbd5e1; cursor: move;"></i>

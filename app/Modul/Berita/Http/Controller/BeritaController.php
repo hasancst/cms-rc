@@ -44,9 +44,17 @@ class BeritaController extends Controller
             'judul' => 'required',
             'isi' => 'required',
             'kategori_ids' => 'required|array',
-            'gambar_utama' => 'nullable|image|max:2048',
+            'gambar_utama' => 'nullable|file|max:2048',
             'tags' => 'nullable|string',
         ]);
+
+        if ($request->hasFile('gambar_utama')) {
+            $file = $request->file('gambar_utama');
+            $extension = strtolower($file->getClientOriginalExtension());
+            if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                return back()->withErrors(['gambar_utama' => 'File harus berupa gambar (jpg, jpeg, png, gif, webp).'])->withInput();
+            }
+        }
 
         $gambarPath = null;
         if ($request->hasFile('gambar_utama')) {
@@ -101,9 +109,17 @@ class BeritaController extends Controller
             'judul' => 'required',
             'isi' => 'required',
             'kategori_ids' => 'required|array',
-            'gambar_utama' => 'nullable|image|max:2048',
+            'gambar_utama' => 'nullable|file|max:2048',
             'tags' => 'nullable|string',
         ]);
+
+        if ($request->hasFile('gambar_utama')) {
+            $file = $request->file('gambar_utama');
+            $extension = strtolower($file->getClientOriginalExtension());
+            if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                return back()->withErrors(['gambar_utama' => 'File harus berupa gambar (jpg, jpeg, png, gif, webp).'])->withInput();
+            }
+        }
 
         $data = [
             'judul' => $request->judul,

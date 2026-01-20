@@ -34,20 +34,26 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard']);
     
     // Modul
-    Route::get('/modul', [AdminController::class, 'indeksModul']);
-    Route::post('/modul/pasang', [AdminController::class, 'pasangModul']);
-    Route::post('/modul/aktifkan', [AdminController::class, 'aktifkanModul']);
-    Route::post('/modul/nonaktifkan', [AdminController::class, 'nonaktifkanModul']);
-    Route::post('/modul/copot', [AdminController::class, 'copotModul']);
-    Route::post('/modul/unggah', [AdminController::class, 'unggahModul']);
+    Route::middleware('cek_izin:kelola-modul')->group(function () {
+        Route::get('/modul', [AdminController::class, 'indeksModul']);
+        Route::post('/modul/pasang', [AdminController::class, 'pasangModul']);
+        Route::post('/modul/aktifkan', [AdminController::class, 'aktifkanModul']);
+        Route::post('/modul/nonaktifkan', [AdminController::class, 'nonaktifkanModul']);
+        Route::post('/modul/copot', [AdminController::class, 'copotModul']);
+        Route::post('/modul/unggah', [AdminController::class, 'unggahModul']);
+    });
 
     // Tema
-    Route::get('/tema', [AdminController::class, 'indeksTema']);
-    Route::post('/tema/aktifkan', [AdminController::class, 'aktifkanTema']);
-    Route::post('/tema/perbarui', [AdminController::class, 'perbaruiTema']);
+    Route::middleware('cek_izin:kelola-tema')->group(function () {
+        Route::get('/tema', [AdminController::class, 'indeksTema']);
+        Route::post('/tema/aktifkan', [AdminController::class, 'aktifkanTema']);
+        Route::post('/tema/perbarui', [AdminController::class, 'perbaruiTema']);
+    });
 
     // Pengaturan
-    Route::get('/pengaturan', [AdminController::class, 'indeksPengaturan']);
-    Route::post('/pengaturan', [AdminController::class, 'simpanPengaturan']);
-    Route::post('/media/unggah', [AdminController::class, 'unggahMedia'])->name('admin.media.unggah');
+    Route::middleware('cek_izin:kelola-pengaturan')->group(function () {
+        Route::get('/pengaturan', [AdminController::class, 'indeksPengaturan']);
+        Route::post('/pengaturan', [AdminController::class, 'simpanPengaturan']);
+        Route::post('/media/unggah', [AdminController::class, 'unggahMedia'])->name('admin.media.unggah');
+    });
 });

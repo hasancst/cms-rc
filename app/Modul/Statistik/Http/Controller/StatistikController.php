@@ -30,15 +30,21 @@ class StatistikController extends Controller
             ->limit(5)
             ->get();
 
-        // Top 5 Negara
+        // Top 5 Negara (Sidebar)
         $topCountries = Pengunjung::select('negara', 'kode_negara', DB::raw('count(*) as jumlah'))
             ->groupBy('negara', 'kode_negara')
             ->orderBy('jumlah', 'desc')
             ->limit(5)
             ->get();
 
+        // Semua Negara untuk Peta
+        $mapData = Pengunjung::select('negara', 'kode_negara', DB::raw('count(*) as jumlah'))
+            ->whereNotNull('kode_negara')
+            ->groupBy('negara', 'kode_negara')
+            ->get();
+
         return view('statistik::indeks', compact(
-            'totalPengunjung', 'totalHariIni', 'totalMingguIni', 'grafikData', 'topPages', 'topCountries'
+            'totalPengunjung', 'totalHariIni', 'totalMingguIni', 'grafikData', 'topPages', 'topCountries', 'mapData'
         ));
     }
 }

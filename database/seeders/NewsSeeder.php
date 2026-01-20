@@ -33,28 +33,47 @@ class NewsSeeder extends Seeder
             [
                 'judul' => 'Tren Keamanan Siber 2026: Ancaman AI Generatif',
                 'slug' => 'tren-keamanan-siber-2026-ancaman-ai-generatif',
+                'ringkasan' => 'Perkembangan AI generatif membawa tantangan baru dalam dunia keamanan siber.',
                 'isi' => '<p>Perkembangan AI generatif membawa tantangan baru dalam dunia keamanan siber. Serangan phishing kini menjadi lebih canggih dan sulit dideteksi...</p>',
-                'status' => 'publikasi',
+                'kategori' => 'Cyber Security',
                 'unggulan' => true,
-                'kategori_id' => 3, // Cyber Security
                 'penulis_id' => $authorId,
+                'gambar_utama' => 'berita/sampul/teknologi.png',
             ],
             [
                 'judul' => 'Memahami Hak Kekayaan Intelektual bagi Kreator Digital',
                 'slug' => 'memahami-hak-kekayaan-intelektual-bagi-kreator-digital',
+                'ringkasan' => 'Di era digital, perlindungan karya menjadi sangat krusial.',
                 'isi' => '<p>Di era digital, perlindungan karya menjadi sangat krusial. Kreator perlu memahami prosedur pendaftaran HAKI untuk melindungi aset mereka...</p>',
-                'status' => 'publikasi',
+                'kategori' => 'Hukum',
                 'unggulan' => false,
-                'kategori_id' => 2, // Hukum
                 'penulis_id' => $authorId,
+                'gambar_utama' => 'berita/sampul/hukum.png',
             ],
         ];
 
         foreach ($news as $item) {
-            \DB::table('berita')->updateOrInsert(
+            $kategoriInput = $item['kategori'];
+            unset($item['kategori']);
+
+            $beritaId = \DB::table('berita')->updateOrInsert(
                 ['slug' => $item['slug']],
-                array_merge($item, ['created_at' => now(), 'updated_at' => now()])
+                array_merge($item, [
+                    'kategori' => $kategoriInput,
+                    'created_at' => now(), 
+                    'updated_at' => now()
+                ])
             );
+
+            // Fetch ID if it updatedOrInsert didn't return it
+            $berita = \DB::table('berita')->where('slug', $item['slug'])->first();
+            $cat = \DB::table('kategori_berita')->where('nama', $kategoriInput)->first();
+
+            if ($berita && $cat) {
+                \DB::table('berita_memiliki_kategori')->updateOrInsert(
+                    ['berita_id' => $berita->id, 'kategori_id' => $cat->id]
+                );
+            }
         }
     }
 }

@@ -26,10 +26,18 @@ class IklanController extends Controller
             'judul' => 'required',
             'jenis' => 'required|in:gambar,script',
             'posisi' => 'required',
-            'gambar' => 'required_if:jenis,gambar|image|max:2048',
+            'gambar' => 'required_if:jenis,gambar|file|max:2048',
             'script' => 'required_if:jenis,script',
             'link' => 'nullable|url'
         ]);
+
+        if ($request->jenis == 'gambar' && $request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $extension = strtolower($file->getClientOriginalExtension());
+            if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                return back()->withErrors(['gambar' => 'File harus berupa gambar (jpg, jpeg, png, gif, webp).'])->withInput();
+            }
+        }
 
         $konten = $request->script;
 
@@ -64,10 +72,18 @@ class IklanController extends Controller
             'judul' => 'required',
             'jenis' => 'required|in:gambar,script',
             'posisi' => 'required',
-            'gambar' => 'nullable|image|max:2048',
+            'gambar' => 'nullable|file|max:2048',
             'script' => 'required_if:jenis,script',
             'link' => 'nullable|url'
         ]);
+
+        if ($request->jenis == 'gambar' && $request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $extension = strtolower($file->getClientOriginalExtension());
+            if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                return back()->withErrors(['gambar' => 'File harus berupa gambar (jpg, jpeg, png, gif, webp).'])->withInput();
+            }
+        }
 
         $data = [
             'judul' => $request->judul,

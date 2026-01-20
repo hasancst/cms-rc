@@ -40,6 +40,7 @@ class VideoController extends Controller
 
             Video::create([
                 'judul' => $request->judul,
+                'slug' => str()->slug($request->judul),
                 'url' => $request->url,
                 'keterangan' => $keterangan,
                 'aktif' => true,
@@ -81,6 +82,7 @@ class VideoController extends Controller
 
         $video->update([
             'judul' => $request->judul,
+            'slug' => str()->slug($request->judul),
             'url' => $request->url,
             'keterangan' => $keterangan,
             'aktif' => $request->has('aktif'),
@@ -90,15 +92,46 @@ class VideoController extends Controller
         return redirect('/admin/video')->with('berhasil', 'Video berhasil diperbarui.');
     }
 
+    public function fetchInfo(Request $request)
+    {
+        $url = $request->url;
+        if (empty($url)) {
+            return response()->json(['error' => 'URL is required'], 400);
+        }
+
+        // Ensure URL has protocol
+        if (!preg_match('/^https?:\/\//', $url)) {
+            $url = 'https://' . $url;
+        }
+
+        if (preg_match('/(youtube\.com|youtu\.be)/', $url)) {
+            $info = $this->getYoutubeInfo($url);
+            if ($info) {
+                return response()->json($info);
+            }
+        }
+
+        return response()->json(['error' => 'Gagal mengambil data video. Pastikan video publik.'], 404);
+    }
+
     private function getYoutubeInfo($url)
     {
         try {
-            $json = @file_get_contents('https://www.youtube.com/oembed?url=' . urlencode($url) . '&format=json');
-            if ($json) {
-                $data = json_decode($json, true);
-                return $data['title'] ?? null;
+            $oembedUrl = 'https://www.youtube.com/oembed?url=' . urlencode($url) . '&format=json';
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $oembedUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            if ($response) {
+                return json_decode($response, true);
             }
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Fetch Video Info Error: ' . $e->getMessage());
             return null;
         }
         return null;

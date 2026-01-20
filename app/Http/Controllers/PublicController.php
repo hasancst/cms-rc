@@ -49,10 +49,10 @@ class PublicController extends Controller
                 ->first();
         }
 
-        // Video Terbaru (Prioritas Unggulan, lalu Terbaru)
-        $videoTerbaru = null;
+        // Video Terbaru (Ambil 2)
+        $videoTerbaru = collect();
         if (Schema::hasTable('video')) {
-            $videoTerbaru = Video::where('aktif', true)->orderBy('unggulan', 'desc')->latest()->first();
+            $videoTerbaru = Video::where('aktif', true)->orderBy('unggulan', 'desc')->latest()->take(2)->get();
         }
 
         return view('tema::index', compact('pengaturan', 'unggulan', 'beritaTerbaru', 'beritaPopuler', 'iklanTop', 'videoTerbaru'));
@@ -86,9 +86,8 @@ class PublicController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        $artikelPopuler = Artikel::latest()->limit(5)->get();
-
-        return view('tema::semua_berita', compact('pengaturan', 'beritaList', 'artikelPopuler', 'cari'));
+        $topBerita = Berita::latest()->limit(5)->get();
+        return view('tema::semua_berita', compact('pengaturan', 'beritaList', 'topBerita', 'cari'));
     }
 
     public function kategoriBerita($slug)
@@ -105,9 +104,8 @@ class PublicController extends Controller
             ->latest()
             ->paginate(12);
 
-        $artikelPopuler = Artikel::latest()->limit(5)->get();
-
-        return view('tema::semua_berita', compact('pengaturan', 'beritaList', 'artikelPopuler', 'kategori'));
+        $topBerita = Berita::latest()->limit(5)->get();
+        return view('tema::semua_berita', compact('pengaturan', 'beritaList', 'topBerita', 'kategori'));
     }
 
     public function kategoriArtikel($slug)

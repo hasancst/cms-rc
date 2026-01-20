@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Modul\Pengguna\Http\Controller\PenggunaController;
 
-Route::middleware(['web', 'auth'])->prefix('admin/pengguna')->group(function () {
+Route::middleware(['web', 'auth', 'cek_izin:kelola-pengguna'])->prefix('admin/pengguna')->group(function () {
     Route::get('/', [PenggunaController::class, 'indeks']);
     Route::get('/tambah', [PenggunaController::class, 'tambah']);
     Route::post('/tambah', [PenggunaController::class, 'simpan']);

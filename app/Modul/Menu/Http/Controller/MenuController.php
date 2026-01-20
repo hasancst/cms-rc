@@ -74,12 +74,31 @@ class MenuController extends Controller
         return back()->with('berhasil', 'Menu berhasil dihapus.');
     }
 
-    public function urukan(Request $request)
+    public function urutan(Request $request)
     {
-        // Logika sederhana untuk urutan (bisa ditingkatkan nanti)
-        foreach ($request->urutan as $id => $order) {
-            Menu::where('id', $id)->update(['urutan' => $order]);
+        if ($request->ajax() || $request->wantsJson()) {
+            $urutan = $request->input('urutan');
+            
+            if (!$urutan || !is_array($urutan)) {
+                return response()->json(['success' => false, 'message' => 'Data urutan tidak valid.'], 400);
+            }
+
+            try {
+                \Illuminate\Support\Facades\DB::transaction(function () use ($urutan) {
+                    foreach ($urutan as $id => $order) {
+                        if (is_numeric($id)) {
+                            Menu::where('id', $id)->update(['urutan' => $order]);
+                        }
+                    }
+                });
+                
+                return response()->json(['success' => true, 'message' => 'Urutan menu diperbarui.']);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Menu sorting error: ' . $e->getMessage());
+                return response()->json(['success' => false, 'message' => 'Gagal menyimpan urutan: ' . $e->getMessage()], 500);
+            }
         }
-        return back()->with('berhasil', 'Urutan menu diperbarui.');
+
+        return back()->with('gagal', 'Permintaan tidak valid.');
     }
 }
