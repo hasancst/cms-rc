@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $pengaturan['nama_situs'] ?? 'CMS' }} - @yield('judul')</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -430,6 +431,11 @@
                 <i class="fas fa-ticket-alt"></i> Tiket
             </a>
             @endif
+            @if(in_array('task', array_map('strtolower', $modulAktif)))
+            <a href="/admin/task" class="nav-item {{ request()->is('admin/task*') ? 'active' : '' }}">
+                <i class="fas fa-tasks"></i> Task
+            </a>
+            @endif
             @if(in_array('knowledgebase', array_map('strtolower', $modulAktif)))
             <div class="nav-item-group">
                 <a href="#" class="nav-item {{ request()->is('admin/kb*') ? 'active' : '' }}" onclick="event.preventDefault(); var sub = document.getElementById('kb-submenu'); var icon = this.querySelector('.arrow-icon'); if(sub.style.display === 'none'){ sub.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { sub.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
@@ -589,6 +595,7 @@
             }, 1000);
         }
     </script>
+    @include('chat::admin.agent_widget')
     @yield('scripts')
 </body>
 </html>

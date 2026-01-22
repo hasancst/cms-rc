@@ -10,6 +10,9 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
+        $schedule->command('app:backup-database')->daily();
+    })
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo('/mlebu');
         $middleware->trustProxies(at: '*');

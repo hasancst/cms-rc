@@ -308,6 +308,76 @@ class AdminController extends Controller
     }
 
     /**
+     * Manajemen Backup
+     */
+    public function buatBackup(Request $request)
+    {
+        $result = \App\Inti\DatabaseBackup::execute();
+
+        if ($result['success']) {
+            return response()->json([
+                'berhasil' => true,
+                'pesan' => 'Backup berhasil dibuat.',
+                'file' => $result['file']
+            ]);
+        }
+
+        return response()->json([
+            'berhasil' => false,
+            'pesan' => 'Gagal membuat backup. ' . ($result['error'] ?? '')
+        ], 500);
+    }
+
+    public function daftarBackup()
+    {
+        $backupDir = storage_path('app/backups');
+        if (!File::exists($backupDir)) {
+            return response()->json([]);
+        }
+
+        $files = File::files($backupDir);
+        $data = [];
+
+        foreach ($files as $file) {
+            if ($file->getExtension() === 'sql') {
+                $data[] = [
+                    'nama' => $file->getFilename(),
+                    'ukuran' => round($file->getSize() / 1024 / 1024, 2) . ' MB',
+                    'tanggal' => date('d M Y H:i', $file->getMTime()),
+                    'timestamp' => $file->getMTime()
+                ];
+            }
+        }
+
+        // Urutkan berdasarkan yang terbaru
+        usort($data, function($a, $b) {
+            return $b['timestamp'] <=> $a['timestamp'];
+        });
+
+        return response()->json($data);
+    }
+
+    public function unduhBackup($file)
+    {
+        $path = storage_path('app/backups/' . $file);
+        if (File::exists($path)) {
+            return response()->download($path);
+        }
+        return abort(404);
+    }
+
+    public function hapusBackup(Request $request)
+    {
+        $file = $request->file;
+        $path = storage_path('app/backups/' . $file);
+        if (File::exists($path)) {
+            File::delete($path);
+            return response()->json(['berhasil' => true]);
+        }
+        return response()->json(['berhasil' => false, 'pesan' => 'File tidak ditemukan.'], 404);
+    }
+
+    /**
      * Helper untuk update file .env
      */
     protected function updateEnv($key, $value)
@@ -315,8 +385,7 @@ class AdminController extends Controller
         $path = base_path('.env');
         if (File::exists($path)) {
             $content = File::get($path);
-            $oldValue = env($key);
-
+            
             // Jika key sudah ada, ganti nilainya
             if (preg_match("/^{$key}=(.*)$/m", $content)) {
                 $content = preg_replace("/^{$key}=.*$/m", "{$key}={$value}", $content);
@@ -326,8 +395,6 @@ class AdminController extends Controller
             }
 
             File::put($path, $content);
-            // Refresh config cache jika diperlukan
-            // Artisan::call('config:clear');
         }
     }
 }
