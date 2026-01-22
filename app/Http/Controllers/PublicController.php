@@ -55,7 +55,47 @@ class PublicController extends Controller
             $videoTerbaru = Video::where('aktif', true)->orderBy('unggulan', 'desc')->latest()->take(2)->get();
         }
 
-        return view('tema::index', compact('pengaturan', 'unggulan', 'beritaTerbaru', 'beritaPopuler', 'iklanTop', 'videoTerbaru'));
+        // Slideshow
+        $slideshow = collect();
+        if (Schema::hasTable('slideshow')) {
+            $slideshow = DB::table('slideshow')->where('aktif', true)->orderBy('urutan')->get();
+        }
+
+        // Portofolio
+        $portofolios = collect();
+        if (Schema::hasTable('portofolios')) {
+            $portofolios = DB::table('portofolios')->where('aktif', true)->orderBy('urutan')->latest()->limit(6)->get();
+        }
+
+        // FAQ
+        $faqs = collect();
+        if (Schema::hasTable('faqs')) {
+            $faqs = DB::table('faqs')->where('aktif', true)->orderBy('urutan')->get();
+        }
+
+        // Layanan
+        $layanans = collect();
+        if (Schema::hasTable('layanans')) {
+            $layanans = DB::table('layanans')->where('aktif', true)->orderBy('urutan')->get();
+        }
+
+        // Unique Portfolio Tags
+        $portfolioTags = collect();
+        if (Schema::hasTable('portofolios')) {
+            $allTags = DB::table('portofolios')->where('aktif', true)->whereNotNull('tags')->pluck('tags');
+            $uniqueTags = [];
+            foreach ($allTags as $t) {
+                foreach (explode(',', $t) as $tag) {
+                    $trimmed = trim($tag);
+                    if ($trimmed && !in_array($trimmed, $uniqueTags)) {
+                        $uniqueTags[] = $trimmed;
+                    }
+                }
+            }
+            $portfolioTags = collect($uniqueTags)->take(10);
+        }
+
+        return view('tema::index', compact('pengaturan', 'unggulan', 'beritaTerbaru', 'beritaPopuler', 'iklanTop', 'videoTerbaru', 'slideshow', 'portofolios', 'faqs', 'layanans', 'portfolioTags'));
     }
 
     public function detailBerita($slug)
@@ -211,7 +251,7 @@ class PublicController extends Controller
         $artikel = Artikel::where('slug', 'tentang-kami')->first();
         $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
         if ($artikel) {
-            return view('tema::artikel_page', compact('artikel', 'pengaturan'));
+            return view('tema::artikel', compact('artikel', 'pengaturan'));
         }
         return view('tema::tentang', compact('pengaturan'));
     }
@@ -221,7 +261,7 @@ class PublicController extends Controller
         $artikel = Artikel::where('slug', 'redaksi')->first();
         $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
         if ($artikel) {
-            return view('tema::artikel_page', compact('artikel', 'pengaturan'));
+            return view('tema::artikel', compact('artikel', 'pengaturan'));
         }
         return view('tema::redaksi', compact('pengaturan'));
     }
@@ -231,18 +271,33 @@ class PublicController extends Controller
         $artikel = Artikel::where('slug', 'kebijakan-privasi')->first();
         $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
         if ($artikel) {
-            return view('tema::artikel_page', compact('artikel', 'pengaturan'));
+            return view('tema::artikel', compact('artikel', 'pengaturan'));
         }
         return view('tema::kebijakan', compact('pengaturan'));
     }
 
     public function syarat()
     {
-        $artikel = Artikel::where('slug', 'syarat-ketentuan')->first();
+        $artikel = Artikel::where('slug', 'syarat-dan-ketentuan')->first();
         $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
         if ($artikel) {
-            return view('tema::artikel_page', compact('artikel', 'pengaturan'));
+            return view('tema::artikel', compact('artikel', 'pengaturan'));
         }
         return view('tema::syarat', compact('pengaturan'));
+    }
+
+    public function portofolio(Request $request)
+    {
+        $query = DB::table('portofolios')->where('aktif', true);
+        
+        if ($request->has('tag')) {
+            $tag = $request->tag;
+            $query->where('tags', 'LIKE', "%$tag%");
+        }
+
+        $portofolios = $query->orderBy('urutan')->paginate(12);
+        $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
+        
+        return view('tema::portofolio', compact('portofolios', 'pengaturan'));
     }
 }

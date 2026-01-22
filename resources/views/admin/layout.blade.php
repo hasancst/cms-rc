@@ -253,6 +253,8 @@
         input[type="email"],
         input[type="password"],
         input[type="url"],
+        input[type="number"],
+        input[type="date"],
         select,
         textarea {
             width: 100%;
@@ -402,6 +404,65 @@
             <a href="/admin/video" class="nav-item {{ request()->is('admin/video*') ? 'active' : '' }}">
                 <i class="fas fa-video"></i> Video
             </a>
+            @endif
+            @if(in_array('slideshow', array_map('strtolower', $modulAktif)))
+            <a href="/admin/slideshow" class="nav-item {{ request()->is('admin/slideshow*') ? 'active' : '' }}">
+                <i class="fas fa-images"></i> Slideshow
+            </a>
+            @endif
+            @if(in_array('portofolio', array_map('strtolower', $modulAktif)))
+            <a href="/admin/portofolio" class="nav-item {{ request()->is('admin/portofolio*') ? 'active' : '' }}">
+                <i class="fas fa-briefcase"></i> Portofolio
+            </a>
+            @endif
+            @if(in_array('faq', array_map('strtolower', $modulAktif)))
+            <a href="/admin/faq" class="nav-item {{ request()->is('admin/faq*') ? 'active' : '' }}">
+                <i class="fas fa-question-circle"></i> FAQ
+            </a>
+            @endif
+            @if(in_array('layanan', array_map('strtolower', $modulAktif)))
+            <a href="/admin/layanan" class="nav-item {{ request()->is('admin/layanan*') ? 'active' : '' }}">
+                <i class="fas fa-concierge-bell"></i> Layanan
+            </a>
+            @endif
+            @if(in_array('tiket', array_map('strtolower', $modulAktif)))
+            <a href="/admin/tiket" class="nav-item {{ request()->is('admin/tiket*') ? 'active' : '' }}">
+                <i class="fas fa-ticket-alt"></i> Tiket
+            </a>
+            @endif
+            @if(in_array('knowledgebase', array_map('strtolower', $modulAktif)))
+            <div class="nav-item-group">
+                <a href="#" class="nav-item {{ request()->is('admin/kb*') ? 'active' : '' }}" onclick="event.preventDefault(); var sub = document.getElementById('kb-submenu'); var icon = this.querySelector('.arrow-icon'); if(sub.style.display === 'none'){ sub.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { sub.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
+                    <i class="fas fa-book-reader"></i>
+                    <span style="flex: 1;">Knowledge Base</span>
+                    <i class="fas fa-chevron-down arrow-icon" style="font-size: 0.8rem; transition: transform 0.3s; transform: {{ request()->is('admin/kb*') ? 'rotate(180deg)' : 'rotate(0deg)' }}"></i>
+                </a>
+                <div id="kb-submenu" style="display: {{ request()->is('admin/kb*') ? 'block' : 'none' }}; padding-left: 15px; overflow: hidden; transition: all 0.3s;">
+                    <a href="/admin/kb/article" class="nav-item {{ request()->is('admin/kb/article*') ? 'active' : '' }}" style="font-size: 0.9rem;">
+                        <i class="fas fa-book" style="width: 18px;"></i> Artikel
+                    </a>
+                    <a href="/admin/kb/category" class="nav-item {{ request()->is('admin/kb/category*') ? 'active' : '' }}" style="font-size: 0.9rem;">
+                        <i class="fas fa-folder-open" style="width: 18px;"></i> Kategori
+                    </a>
+                </div>
+            </div>
+            @endif
+            @if(in_array('chat', array_map('strtolower', $modulAktif)))
+            <div class="nav-item-group">
+                <a href="#" class="nav-item {{ request()->is('admin/chat*') ? 'active' : '' }}" onclick="event.preventDefault(); var sub = document.getElementById('chat-submenu'); var icon = this.querySelector('.arrow-icon'); if(sub.style.display === 'none'){ sub.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { sub.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
+                    <i class="fas fa-comments"></i>
+                    <span style="flex: 1;">Chat Widget</span>
+                    <i class="fas fa-chevron-down arrow-icon" style="font-size: 0.8rem; transition: transform 0.3s; transform: {{ request()->is('admin/chat*') ? 'rotate(180deg)' : 'rotate(0deg)' }}"></i>
+                </a>
+                <div id="chat-submenu" style="display: {{ request()->is('admin/chat*') ? 'block' : 'none' }}; padding-left: 15px; overflow: hidden; transition: all 0.3s;">
+                    <a href="/admin/chat" class="nav-item {{ request()->is('admin/chat') && !request()->is('admin/chat/sessions') ? 'active' : '' }}" style="font-size: 0.9rem;">
+                        <i class="fas fa-cog" style="width: 18px;"></i> Widgets
+                    </a>
+                    <a href="/admin/chat/sessions" class="nav-item {{ request()->is('admin/chat/sessions*') ? 'active' : '' }}" style="font-size: 0.9rem;">
+                        <i class="fas fa-history" style="width: 18px;"></i> Sessions
+                    </a>
+                </div>
+            </div>
             @endif
             <a href="/admin/modul" class="nav-item {{ request()->is('admin/modul*') ? 'active' : '' }}">
                 <i class="fas fa-cubes"></i> Modul

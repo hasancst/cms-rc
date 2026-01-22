@@ -23,6 +23,7 @@ Route::get('/artikel/kategori/{slug}', [PublicController::class, 'kategoriArtike
 Route::get('/artikel/{slug}', [PublicController::class, 'detailArtikel']);
 Route::get('/video', [PublicController::class, 'video']);
 Route::get('/video/{slug}', [PublicController::class, 'detailVideo']);
+Route::get('/portofolio', [PublicController::class, 'portofolio']);
 Route::get('/kontak', [PublicController::class, 'kontak']);
 Route::post('/kontak', [PublicController::class, 'kirimKontak']);
 Route::get('/tentang', [PublicController::class, 'tentang']);

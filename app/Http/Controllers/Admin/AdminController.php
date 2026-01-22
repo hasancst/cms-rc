@@ -70,24 +70,31 @@ class AdminController extends Controller
     {
         $folderModul = app_path('Modul');
         $directories = File::directories($folderModul);
-        $modulTerpasang = DB::table('modul')->get()->keyBy('slug');
+        $modulTerpasang = DB::table('modul')->get();
+        // Buat mapping case-insensitive
+        $mappingModul = [];
+        foreach ($modulTerpasang as $m) {
+            $mappingModul[strtolower($m->slug)] = $m;
+        }
 
         $daftarModul = [];
         foreach ($directories as $dir) {
-            $slug = basename($dir);
+            $slugDir = basename($dir);
+            $slugLower = strtolower($slugDir);
             $manifestPath = $dir . '/manifest.json';
             
             if (File::exists($manifestPath)) {
                 $manifest = json_decode(File::get($manifestPath), true);
-                $terpasang = isset($modulTerpasang[$slug]);
+                $isTerpasang = isset($mappingModul[$slugLower]);
+                $modulData = $isTerpasang ? $mappingModul[$slugLower] : null;
                 
                 $daftarModul[] = [
-                    'nama' => $manifest['nama'] ?? $slug,
-                    'slug' => $slug,
+                    'nama' => $manifest['nama'] ?? $slugDir,
+                    'slug' => $slugDir, // Gunakan slug dari folder sebagai referensi utama
                     'versi' => $manifest['versi'] ?? '1.0.0',
                     'deskripsi' => $manifest['deskripsi'] ?? '',
-                    'terpasang' => $terpasang,
-                    'aktif' => $terpasang ? $modulTerpasang[$slug]->aktif : false,
+                    'terpasang' => $isTerpasang,
+                    'aktif' => $isTerpasang ? $modulData->aktif : false,
                 ];
             }
         }
@@ -105,14 +112,16 @@ class AdminController extends Controller
     public function aktifkanModul(Request $request)
     {
         $slug = $request->slug;
-        DB::table('modul')->where('slug', $slug)->update(['aktif' => true]);
+        // Update case-insensitive
+        DB::table('modul')->whereRaw('LOWER(slug) = ?', [strtolower($slug)])->update(['aktif' => true]);
         return back()->with('berhasil', "Modul {$slug} diaktifkan.");
     }
 
     public function nonaktifkanModul(Request $request)
     {
         $slug = $request->slug;
-        Artisan::call('modul:nonaktifkan', ['slug' => $slug]);
+        // Gunakan lower untuk memastikan ketemu di database pgsql
+        DB::table('modul')->whereRaw('LOWER(slug) = ?', [strtolower($slug)])->update(['aktif' => false]);
         return back()->with('berhasil', "Modul {$slug} dinonaktifkan.");
     }
 
@@ -126,8 +135,12 @@ class AdminController extends Controller
     public function unggahModul(Request $request)
     {
         $request->validate([
-            'file_zip' => 'required|mimes:zip|max:10240',
+            'file_zip' => 'required|file|max:10240',
         ]);
+
+        if (strtolower($request->file('file_zip')->getClientOriginalExtension()) !== 'zip') {
+             return back()->withErrors(['file_zip' => 'File harus berupa arsip ZIP.']);
+        }
 
         $zipPath = $request->file('file_zip')->path();
         $extractor = new ZipExtractor();
@@ -230,17 +243,30 @@ class AdminController extends Controller
         
         // Handle Upload Logo
         if ($request->hasFile('logo')) {
+            // Kita gunakan 'file' saja karena 'image' dan 'mimes' butuh ekstensi fileinfo yang tidak aktif di server ini
             $request->validate([
-                'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'logo' => 'file|max:2048',
             ]);
 
-            $media = new \App\Inti\MediaManager();
-            $path = $media->upload($request->file('logo'), 'situs'); // Upload ke folder situs
-             
-            DB::table('pengaturan')->updateOrInsert(
-                ['kunci' => 'logo'],
-                ['nilai' => $path, 'updated_at' => now()]
-            );
+            $file = $request->file('logo');
+            $extension = strtolower($file->getClientOriginalExtension());
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+
+            if (!in_array($extension, $allowed)) {
+                return back()->withErrors(['logo' => 'Format logo harus berupa gambar (jpg, png, gif, svg, webp).']);
+            }
+
+            try {
+                $media = new \App\Inti\MediaManager();
+                $path = $media->upload($file, 'situs'); // Upload ke folder situs
+                 
+                DB::table('pengaturan')->updateOrInsert(
+                    ['kunci' => 'logo'],
+                    ['nilai' => $path, 'updated_at' => now()]
+                );
+            } catch (\Exception $e) {
+                return back()->withErrors(['logo' => 'Gagal mengunggah logo: ' . $e->getMessage()]);
+            }
         }
 
         foreach ($data as $kunci => $nilai) {

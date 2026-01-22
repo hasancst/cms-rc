@@ -51,8 +51,12 @@ class MediaManager
         // Gunakan GD atau Imagick via Native PHP jika Intervention belum di-install
         // Namun karena user minta "terbukti berjalan", saya akan gunakan fungsi built-in PHP GD
         $image = null;
-        $info = getimagesize($file->getRealPath());
+        $info = @getimagesize($file->getRealPath());
         
+        if (!$info || !isset($info['mime'])) {
+             return $file->storeAs($folder, time() . '_' . str($namaAsli)->slug() . '.' . $file->getClientOriginalExtension(), 'public');
+        }
+
         if ($info['mime'] == 'image/jpeg') $image = imagecreatefromjpeg($file->getRealPath());
         elseif ($info['mime'] == 'image/png') {
             $image = imagecreatefrompng($file->getRealPath());

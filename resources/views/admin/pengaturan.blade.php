@@ -83,6 +83,28 @@
                         <label style="display: block; margin-bottom: 8px; font-weight: 600;">Alamat Kantor</label>
                         <textarea name="alamat" rows="3">{{ $pengaturan['alamat'] ?? '' }}</textarea>
                     </div>
+
+                    <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;">Media Sosial</h3>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600;">Facebook URL</label>
+                        <input type="text" name="sosmed_facebook" value="{{ $pengaturan['sosmed_facebook'] ?? '' }}" placeholder="https://facebook.com/username">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600;">Twitter/X URL</label>
+                        <input type="text" name="sosmed_twitter" value="{{ $pengaturan['sosmed_twitter'] ?? '' }}" placeholder="https://twitter.com/username">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600;">Instagram URL</label>
+                        <input type="text" name="sosmed_instagram" value="{{ $pengaturan['sosmed_instagram'] ?? '' }}" placeholder="https://instagram.com/username">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600;">LinkedIn URL</label>
+                        <input type="text" name="sosmed_linkedin" value="{{ $pengaturan['sosmed_linkedin'] ?? '' }}" placeholder="https://linkedin.com/in/username">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600;">YouTube URL</label>
+                        <input type="text" name="sosmed_youtube" value="{{ $pengaturan['sosmed_youtube'] ?? '' }}" placeholder="https://youtube.com/c/channelname">
+                    </div>
                 </div>
             </div>
         </div>
