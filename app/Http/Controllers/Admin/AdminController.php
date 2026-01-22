@@ -377,6 +377,34 @@ class AdminController extends Controller
         return response()->json(['berhasil' => false, 'pesan' => 'File tidak ditemukan.'], 404);
     }
 
+    public function restoreBackup(Request $request)
+    {
+        $file = $request->file;
+        $path = storage_path('app/backups/' . $file);
+        
+        if (!File::exists($path)) {
+            if (File::exists(base_path($file))) {
+                $path = base_path($file);
+            } else {
+                return response()->json(['berhasil' => false, 'pesan' => 'File tidak ditemukan.'], 404);
+            }
+        }
+
+        $result = \App\Inti\DatabaseBackup::restore($path);
+
+        if ($result['success']) {
+            return response()->json([
+                'berhasil' => true,
+                'pesan' => 'Database berhasil di-restore.'
+            ]);
+        }
+
+        return response()->json([
+            'berhasil' => false,
+            'pesan' => 'Gagal restore database. ' . ($result['error'] ?? '') . "\n" . ($result['output'] ?? '')
+        ], 500);
+    }
+
     /**
      * Helper untuk update file .env
      */

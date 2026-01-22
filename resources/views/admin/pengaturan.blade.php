@@ -339,6 +339,7 @@
                             </td>
                             <td style="text-align: right; padding: 8px 0;">
                                 <a href="/admin/backup/unduh/${file.nama}" class="btn-icon" title="Unduh" style="color: var(--primary);"><i class="fas fa-download"></i></a>
+                                <button type="button" onclick="restoreBackup('${file.nama}')" class="btn-icon" title="Restore" style="color: #10b981; background: none; border: none; cursor: pointer;"><i class="fas fa-history"></i></button>
                                 <button type="button" onclick="hapusBackup('${file.nama}')" class="btn-icon" title="Hapus" style="color: var(--danger); background: none; border: none; cursor: pointer;"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -410,6 +411,42 @@
             } else {
                 alert('Gagal menghapus: ' + data.pesan);
             }
+        });
+    }
+
+    function restoreBackup(filename) {
+        if (!confirm('⚠️ PERINGATAN: Restore akan mengganti semua data database saat ini dengan data dari backup.\n\nApakah Anda yakin ingin melanjutkan?')) return;
+        
+        if (!confirm('Konfirmasi sekali lagi: Data saat ini akan HILANG dan diganti dengan backup. Lanjutkan?')) return;
+
+        const btn = event.currentTarget;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        fetch('/admin/backup/restore', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ file: filename })
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-history"></i>';
+            
+            if (data.berhasil) {
+                alert('✅ Database berhasil di-restore!\n\nHalaman akan dimuat ulang.');
+                window.location.reload();
+            } else {
+                alert('❌ Gagal restore: ' + data.pesan);
+            }
+        })
+        .catch(error => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-history"></i>';
+            alert('❌ Terjadi kesalahan sistem: ' + error.message);
         });
     }
 </script>

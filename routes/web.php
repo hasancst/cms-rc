@@ -62,5 +62,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('/backup/daftar', [AdminController::class, 'daftarBackup']);
         Route::get('/backup/unduh/{file}', [AdminController::class, 'unduhBackup']);
         Route::post('/backup/hapus', [AdminController::class, 'hapusBackup']);
+        Route::post('/backup/restore', [AdminController::class, 'restoreBackup']);
     });
 });
