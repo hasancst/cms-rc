@@ -595,7 +595,9 @@
             }, 1000);
         }
     </script>
-    @include('chat::admin.agent_widget')
+    @if(in_array('chat', array_map('strtolower', $modulAktif)))
+        @include('chat::admin.agent_widget')
+    @endif
     @yield('scripts')
 </body>
 </html>

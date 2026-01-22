@@ -44,4 +44,44 @@ class DatabaseBackup
             'error' => 'Error code: ' . $returnVar
         ];
     }
+
+    /**
+     * Restore database from backup file
+     */
+    public static function restore($backupPath)
+    {
+        if (!File::exists($backupPath)) {
+            return [
+                'success' => false,
+                'error' => 'Backup file not found'
+            ];
+        }
+
+        // Path pg_restore (khusus server ini)
+        $pgRestorePath = '/www/server/pgsql/bin/psql';
+        
+        $dbHost = env('DB_HOST', '127.0.0.1');
+        $dbPort = env('DB_PORT', '5432');
+        $dbName = env('DB_DATABASE', 'rc');
+        $dbUser = env('DB_USERNAME', 'rc');
+        $dbPass = env('DB_PASSWORD', '');
+
+        // PostgreSQL restore menggunakan psql
+        $command = "PGPASSWORD='{$dbPass}' {$pgRestorePath} -h {$dbHost} -p {$dbPort} -U {$dbUser} {$dbName} < {$backupPath} 2>&1";
+
+        exec($command, $output, $returnVar);
+
+        if ($returnVar === 0) {
+            return [
+                'success' => true,
+                'message' => 'Database restored successfully'
+            ];
+        }
+
+        return [
+            'success' => false,
+            'error' => 'Error code: ' . $returnVar,
+            'output' => implode("\n", $output)
+        ];
+    }
 }
