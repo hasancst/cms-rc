@@ -56,5 +56,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('/pengaturan', [AdminController::class, 'indeksPengaturan']);
         Route::post('/pengaturan', [AdminController::class, 'simpanPengaturan']);
         Route::post('/media/unggah', [AdminController::class, 'unggahMedia'])->name('admin.media.unggah');
+        
+        // Backup routes
+        Route::post('/backup/buat', [AdminController::class, 'buatBackup']);
+        Route::get('/backup/daftar', [AdminController::class, 'daftarBackup']);
+        Route::get('/backup/unduh/{file}', [AdminController::class, 'unduhBackup']);
+        Route::post('/backup/hapus', [AdminController::class, 'hapusBackup']);
     });
 });

@@ -17,4 +17,9 @@ Route::prefix('admin/chat')->middleware(['web', 'auth'])->group(function () {
     Route::get('/', [ChatWidgetController::class, 'index']);
     Route::post('/widget/create', [ChatWidgetController::class, 'createWidget']);
     Route::get('/sessions', [ChatWidgetController::class, 'listSessions']);
+    
+    // Agent API
+    Route::get('/api/active-sessions', [ChatWidgetController::class, 'getAdminActiveSessions']);
+    Route::get('/api/messages/{sessionId}', [ChatWidgetController::class, 'getAdminMessages']);
+    Route::post('/api/message', [ChatWidgetController::class, 'sendAdminMessage']);
 });

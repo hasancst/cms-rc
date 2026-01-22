@@ -253,4 +253,60 @@ class ChatWidgetController extends Controller
 
         return view('chat::admin.sessions', compact('sessions'));
     }
+
+    // Agent API Methods
+    public function getAdminActiveSessions()
+    {
+        $sessions = ChatSession::whereIn('status', ['aktif', 'eskalasi'])
+            ->with(['messages' => function($q) {
+                $q->latest()->limit(1);
+            }])
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->map(function($s) {
+                return [
+                    'id' => $s->id,
+                    'nama_pengunjung' => $s->nama_pengunjung,
+                    'last_message' => $s->messages->first()->pesan ?? '',
+                    'updated_at' => $s->updated_at
+                ];
+            });
+
+        return response()->json($sessions);
+    }
+
+    public function getAdminMessages($sessionId)
+    {
+        $session = ChatSession::findOrFail($sessionId);
+        $messages = $session->messages()
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(fn($msg) => [
+                'sender' => $msg->pengirim,
+                'message' => $msg->pesan,
+                'timestamp' => $msg->created_at->toISOString()
+            ]);
+            
+        return response()->json($messages);
+    }
+
+    public function sendAdminMessage(Request $request)
+    {
+        $request->validate([
+            'session_id' => 'required|exists:chat_sessions,id',
+            'message' => 'required|string'
+        ]);
+
+        $session = ChatSession::findOrFail($request->session_id);
+        
+        ChatMessage::create([
+            'session_id' => $session->id,
+            'pengirim' => 'agent', // Human agent
+            'pesan' => $request->message
+        ]);
+        
+        $session->updateAktivitas();
+
+        return response()->json(['success' => true]);
+    }
 }

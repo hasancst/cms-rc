@@ -43,6 +43,7 @@
         <div class="tab-item" onclick="switchTab('optimasi')">Optimasi</div>
         <div class="tab-item" onclick="switchTab('email')">Konfigurasi Email</div>
         <div class="tab-item" onclick="switchTab('keamanan')">Keamanan</div>
+        <div class="tab-item" onclick="switchTab('backup')">Backup DB</div>
     </div>
 
     <form action="/admin/pengaturan" method="POST" enctype="multipart/form-data">
@@ -238,6 +239,55 @@
             </div>
         </div>
 
+        <!-- Tab Backup -->
+        <div id="backup" class="tab-content">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                    <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;">Pengaturan Backup</h3>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Backup Otomatis</label>
+                        <select name="backup_otomatis">
+                            <option value="0" {{ ($pengaturan['backup_otomatis'] ?? '0') == '0' ? 'selected' : '' }}>Nonaktif</option>
+                            <option value="1" {{ ($pengaturan['backup_otomatis'] ?? '0') == '1' ? 'selected' : '' }}>Aktif (Harian)</option>
+                        </select>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Memerlukan Cron Job untuk berjalan secara otomatis.</p>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Simpan Backup di Server</label>
+                        <select name="backup_simpan_server">
+                            <option value="1" {{ ($pengaturan['backup_simpan_server'] ?? '1') == '1' ? 'selected' : '' }}>Ya</option>
+                            <option value="0" {{ ($pengaturan['backup_simpan_server'] ?? '1') == '0' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Kirim Ke Email</label>
+                        <input type="text" name="backup_email" value="{{ $pengaturan['backup_email'] ?? '' }}" placeholder="email@tujuan.com">
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Backup akan dikirim sebagai lampiran (jika ukuran memungkinkan).</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;">Backup Manual</h3>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <p style="margin-bottom: 15px; font-size: 0.9rem;">Klik tombol di bawah untuk mencadangkan database Anda secara langsung ke server.</p>
+                        <button type="button" onclick="lakukanBackup()" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-download"></i> Buat Backup Sekarang
+                        </button>
+                        <div id="backup-status" style="margin-top: 15px; font-size: 0.85rem; display: none;">
+                            <span class="badge" id="status-text">Memproses...</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <h4 style="margin-bottom: 15px; font-size: 1rem;">File Terakhir</h4>
+                        <div id="daftar-backup" style="max-height: 200px; overflow-y: auto;">
+                            <!-- Akan diisi via JS/PHP -->
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">Belum ada file backup.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end;">
             <button type="submit" class="btn">
                 <i class="fas fa-save"></i> Simpan Perubahan
@@ -263,6 +313,104 @@
         // Tambahkan active ke tab yang dipilih
         event.currentTarget.classList.add('active');
         document.getElementById(tabId).classList.add('active');
+
+        if (tabId === 'backup') {
+            loadBackupList();
+        }
+    }
+
+    function loadBackupList() {
+        fetch('/admin/backup/daftar')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('daftar-backup');
+                if (data.length === 0) {
+                    container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">Belum ada file backup.</p>';
+                    return;
+                }
+
+                let html = '<table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">';
+                data.forEach(file => {
+                    html += `
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 8px 0;">
+                                <strong>${file.nama}</strong><br>
+                                <span style="color: var(--text-muted); font-size: 0.75rem;">${file.tanggal} - ${file.ukuran}</span>
+                            </td>
+                            <td style="text-align: right; padding: 8px 0;">
+                                <a href="/admin/backup/unduh/${file.nama}" class="btn-icon" title="Unduh" style="color: var(--primary);"><i class="fas fa-download"></i></a>
+                                <button type="button" onclick="hapusBackup('${file.nama}')" class="btn-icon" title="Hapus" style="color: var(--danger); background: none; border: none; cursor: pointer;"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                html += '</table>';
+                container.innerHTML = html;
+            });
+    }
+
+    function lakukanBackup() {
+        const btn = event.currentTarget;
+        const status = document.getElementById('backup-status');
+        const statusText = document.getElementById('status-text');
+
+        btn.disabled = true;
+        status.style.display = 'block';
+        statusText.innerText = 'Sedang memproses...';
+        statusText.style.background = 'var(--primary-light)';
+        statusText.style.color = 'var(--primary)';
+
+        fetch('/admin/backup/buat', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            if (data.berhasil) {
+                statusText.innerText = 'Backup Berhasil!';
+                statusText.style.background = '#dcfce7';
+                statusText.style.color = '#166534';
+                loadBackupList();
+            } else {
+                statusText.innerText = 'Gagal: ' + data.pesan;
+                statusText.style.background = '#fee2e2';
+                statusText.style.color = '#991b1b';
+            }
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 5000);
+        })
+        .catch(error => {
+            btn.disabled = false;
+            statusText.innerText = 'Terjadi kesalahan sistem.';
+            statusText.style.background = '#fee2e2';
+            statusText.style.color = '#991b1b';
+        });
+    }
+
+    function hapusBackup(filename) {
+        if (!confirm('Hapus file backup ini?')) return;
+
+        fetch('/admin/backup/hapus', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ file: filename })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.berhasil) {
+                loadBackupList();
+            } else {
+                alert('Gagal menghapus: ' + data.pesan);
+            }
+        });
     }
 </script>
 @endsection
