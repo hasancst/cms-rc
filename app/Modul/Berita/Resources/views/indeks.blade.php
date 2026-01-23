@@ -7,6 +7,9 @@
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
         <h3>Daftar Berita</h3>
         <div style="display: flex; gap: 10px;">
+            <a href="/admin/berita/import-wp" class="btn" style="background: #eab308;">
+                <i class="fab fa-wordpress"></i> Import WP
+            </a>
             <a href="/admin/berita/kategori" class="btn" style="background: #64748b;">
                 <i class="fas fa-tags"></i> Kategori
             </a>

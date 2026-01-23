@@ -1,10 +1,36 @@
 # Dokumentasi CMS Laravel Modular Anti-Gravity
 
-## Struktur Folder
-- `app/Inti`: Core sistem (Module Loader, Theme Manager, dll).
-- `app/Modul`: Tempat penyimpanan modul (plugin).
-- `resources/theme`: Tempat penyimpanan tema UI.
-- `database/migrations`: Migrasi core (Bahasa Indonesia).
+## 🚀 Teknologi Utama
+- **PHP**: 8.3 (Dikonversi dari standar Laravel modern)
+- **Framework**: Laravel 12.x
+- **Database**: PostgreSQL (Driver `pgsql`)
+- **Arsitektur**: Modular Monolith
+
+## 📂 Struktur Folder Global
+- `app/Inti`: Core engine (Module Loader, Theme Manager, Media & Backup).
+- `app/Modul`: Direktori untuk fitur modular (Setiap fitur adalah package mandiri).
+- `resources/theme`: Lokasi view untuk tema frontend publik.
+- `public/theme`: Lokasi aset statis (CSS, JS, Img) untuk tema publik.
+- `database/migrations`: Migrasi tabel core sistem.
+
+## 🏗️ Struktur Coding & Arsitektur
+Aplikasi ini dirancang dengan prinsip **Separation of Concerns** yang ketat melalui modul:
+
+### 1. Struktur Modul (`app/Modul/{Slug}`)
+Setiap modul wajib mengikuti struktur berikut:
+- `Http/Controllers/`: Penanganan request admin.
+- `Model/`: Eloquent Model untuk tabel modul.
+- `Resources/views/`: Blade template untuk dashboard admin.
+- `Rute/web.php`: Definisi URL untuk modul tersebut.
+- `Database/Migrasi/`: Daftar migrasi tabel spesifik modul.
+- `manifest.json`: Berisi metadata penting dan entry point Service Provider.
+
+### 2. Provider Injection
+Data global (Settings, Menu, Active Modules) diinjeksikan ke seluruh view melalui `AppServiceProvider` menggunakan `View::composer('*')`. Ini memastikan tema publik dapat mengakses data dinamis tanpa harus memanggil controller manual.
+
+### 3. Localization & Database standard
+- Nama tabel dan kolom menggunakan Bahasa Indonesia (contoh: `pengaturan`, `berita`, `layanans`).
+- Frontend menggunakan multi-bahasa melalui helper standar Laravel.
 
 ## Cara Membuat Modul Baru
 1. Buat folder di `app/Modul/{NamaModul}`.

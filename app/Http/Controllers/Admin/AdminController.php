@@ -297,6 +297,39 @@ class AdminController extends Controller
         return back()->with('berhasil', 'Pengaturan sistem berhasil diperbarui.');
     }
 
+    public function testGemini(Request $request)
+    {
+        $request->validate([
+            'api_key' => 'required',
+            'model' => 'required'
+        ]);
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->post("https://generativeLanguage.googleapis.com/v1beta/models/{$request->model}:generateContent?key={$request->api_key}", [
+                'contents' => [
+                    [
+                        'parts' => [
+                            ['text' => 'Test connection. Reply with "OK" only.']
+                        ]
+                    ]
+                ]
+            ]);
+
+            if ($response->successful()) {
+                return response()->json(['berhasil' => true, 'pesan' => 'Koneksi berhasil! ' . $response->json()['candidates'][0]['content']['parts'][0]['text']]);
+            }
+
+            $errorData = $response->json();
+            $errorMessage = $errorData['error']['message'] ?? 'Unknown Error';
+            return response()->json(['berhasil' => false, 'pesan' => 'Gagal: ' . $errorMessage . ' (HTTP ' . $response->status() . ')']);
+
+        } catch (\Exception $e) {
+            return response()->json(['berhasil' => false, 'pesan' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+    }
+
     public function unggahMedia(Request $request)
     {
         if ($request->hasFile('image')) {

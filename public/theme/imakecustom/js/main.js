@@ -37,21 +37,90 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Portfolio filtering (mockup functionality)
+    // Portfolio filtering
     const filterBtns = document.querySelectorAll('.portfolio-filter button');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
+            const filter = btn.getAttribute('data-filter');
+
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            // In a real app, you would filter the portfolio items here
+
+            portfolioItems.forEach(item => {
+                if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                    item.style.display = 'block';
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'scale(1)';
+                    }, 10);
+                } else {
+                    item.style.opacity = '0';
+                    item.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 300);
+                }
+            });
         });
     });
 
-    // Mobile menu toggle (mockup)
+    // Mobile menu toggle
     const menuToggle = document.querySelector('.menu-toggle');
-    if (menuToggle) {
+    const navLinks = document.querySelector('.nav-links');
+    if (menuToggle && navLinks) {
         menuToggle.addEventListener('click', () => {
-            alert('Mobile menu clicked! In a full implementation, this would open a sidebar.');
+            navLinks.classList.toggle('active');
+            menuToggle.classList.toggle('active');
         });
     }
+
+    // FAQ Accordion
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        if (question) {
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                faqItems.forEach(i => i.classList.remove('active'));
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        }
+    });
+    // Contact Modal Logic
+    const modal = document.getElementById('contactModal');
+    const closeBtn = document.querySelector('.close-modal');
+
+    const openModal = (e) => {
+        if (e) e.preventDefault();
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+        setTimeout(() => {
+            modal.querySelector('.modal-content').classList.add('visible');
+        }, 10);
+    };
+
+    const closeModal = () => {
+        modal.querySelector('.modal-content').classList.remove('visible');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }, 300);
+    };
+
+    // Attach to all contact links in header and footer
+    document.querySelectorAll('a[href="/kontak"], a[href="/#contact"], a[href="#contact"], .btn-primary[href="/#contact"]').forEach(btn => {
+        btn.addEventListener('click', openModal);
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target == modal) closeModal();
+    });
 });

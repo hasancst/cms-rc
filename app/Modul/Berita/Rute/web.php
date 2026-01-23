@@ -14,6 +14,13 @@ Route::middleware(['web', 'auth'])->prefix('admin/berita')->group(function () {
     Route::post('/quick-kategori/{id}', [BeritaController::class, 'quickKategori']);
     Route::delete('/hapus/{id}', [BeritaController::class, 'hapus']);
     
+    // Import WordPress
+    Route::get('/import-wp', [BeritaController::class, 'formImportWP']);
+    Route::post('/import-wp', [BeritaController::class, 'prosesImportWP']);
+
+    // AI Help
+    Route::post('/ai-bantu', [BeritaController::class, 'aiBantu']);
+    
     // Kategori
     Route::get('/kategori', [KategoriController::class, 'indeks']);
     Route::post('/kategori', [KategoriController::class, 'simpan']);

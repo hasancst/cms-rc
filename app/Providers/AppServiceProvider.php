@@ -34,11 +34,20 @@ class AppServiceProvider extends ServiceProvider
         // Share Data Global ke View
         \Illuminate\Support\Facades\View::composer('*', function ($view) {
             $pengaturan = \Illuminate\Support\Facades\DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
-            $headerMenus = [];
-            $footerMenus = [];
+            $headerMenus = collect([]);
+            $footerMenus = collect([]);
+            $supportMenus = collect([]);
+            
             if (\Illuminate\Support\Facades\Schema::hasTable('menus')) {
-                $headerMenus = \App\Modul\Menu\Model\Menu::with('children')->where('posisi', 'header')->whereNull('parent_id')->orderBy('urutan')->get();
-                $footerMenus = \App\Modul\Menu\Model\Menu::where('posisi', 'footer')->whereNull('parent_id')->orderBy('urutan')->get();
+                $groupedMenus = \App\Modul\Menu\Model\Menu::with('children')
+                    ->whereNull('parent_id')
+                    ->orderBy('urutan')
+                    ->get()
+                    ->groupBy('posisi');
+                
+                $headerMenus = $groupedMenus->get('header', collect([]));
+                $footerMenus = $groupedMenus->get('footer', collect([]));
+                $supportMenus = $groupedMenus->get('support', collect([]));
             }
 
             $globalIklan = collect([]);
@@ -55,6 +64,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('menus', $headerMenus); // Tetap 'menus' untuk kompatibilitas header jika perlu, tapi lebih baik gunakan nama baru
             $view->with('headerMenus', $headerMenus);
             $view->with('footerMenus', $footerMenus);
+            $view->with('supportMenus', $supportMenus);
             $view->with('globalIklan', $globalIklan);
             $view->with('modulAktif', $modulAktif);
         });

@@ -41,6 +41,7 @@
     <div class="tabs">
         <div class="tab-item active" onclick="switchTab('umum')">Umum</div>
         <div class="tab-item" onclick="switchTab('optimasi')">Optimasi</div>
+        <div class="tab-item" onclick="switchTab('ai')">Kecerdasan Buatan (AI)</div>
         <div class="tab-item" onclick="switchTab('email')">Konfigurasi Email</div>
         <div class="tab-item" onclick="switchTab('keamanan')">Keamanan</div>
         <div class="tab-item" onclick="switchTab('backup')">Backup DB</div>
@@ -150,6 +151,34 @@
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600;">Kualitas WebP (1-100)</label>
                         <input type="text" name="optimasi_webp_kualitas" value="{{ $pengaturan['optimasi_webp_kualitas'] ?? '80' }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab AI -->
+        <div id="ai" class="tab-content">
+            <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;">Integrasi Google Gemini AI</h3>
+            <div style="max-width: 600px;">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Google Gemini API Key</label>
+                    <input type="password" name="ai_gemini_key" value="{{ $pengaturan['ai_gemini_key'] ?? '' }}" placeholder="AIzaSy...">
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Gunakan API Key dari <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a>. Fitur AI Help pada penulisan berita akan menggunakan kunci ini.</p>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Model AI</label>
+                    <select name="ai_gemini_model" id="ai_gemini_model">
+                        <option value="gemini-flash-latest" {{ ($pengaturan['ai_gemini_model'] ?? 'gemini-flash-latest') == 'gemini-flash-latest' ? 'selected' : '' }}>Gemini Flash Latest (Terbaru - Paling Cepat)</option>
+                        <option value="gemini-1.5-flash-latest" {{ ($pengaturan['ai_gemini_model'] ?? 'gemini-flash-latest') == 'gemini-1.5-flash-latest' ? 'selected' : '' }}>Gemini 1.5 Flash Latest</option>
+                        <option value="gemini-1.5-pro" {{ ($pengaturan['ai_gemini_model'] ?? 'gemini-flash-latest') == 'gemini-1.5-pro' ? 'selected' : '' }}>Gemini 1.5 Pro</option>
+                        <option value="gemini-2.0-flash-exp" {{ ($pengaturan['ai_gemini_model'] ?? 'gemini-flash-latest') == 'gemini-2.0-flash-exp' ? 'selected' : '' }}>Gemini 2.0 Flash Experimental</option>
+                    </select>
+                </div>
+                <div style="margin-top: 10px;">
+                    <button type="button" onclick="testKoneksiGemini()" class="btn" style="background: #eab308; width: 100%; justify-content: center;">
+                        <i class="fas fa-plug"></i> Test Koneksi API
+                    </button>
+                    <div id="test-ai-status" style="margin-top: 10px; font-size: 0.85rem; display: none; padding: 10px; border-radius: 8px;">
                     </div>
                 </div>
             </div>
@@ -339,7 +368,7 @@
                             </td>
                             <td style="text-align: right; padding: 8px 0;">
                                 <a href="/admin/backup/unduh/${file.nama}" class="btn-icon" title="Unduh" style="color: var(--primary);"><i class="fas fa-download"></i></a>
-                                <button type="button" onclick="restoreBackup('${file.nama}')" class="btn-icon" title="Restore" style="color: #10b981; background: none; border: none; cursor: pointer;"><i class="fas fa-history"></i></button>
+                                <button type="button" onclick="restoreBackup('${file.nama}')" class="btn-icon" title="Restore" style="color: #10b981; background: none; border: none; cursor: pointer; display: inline-block; margin: 0 5px;"><i class="fas fa-history"></i> Restore</button>
                                 <button type="button" onclick="hapusBackup('${file.nama}')" class="btn-icon" title="Hapus" style="color: var(--danger); background: none; border: none; cursor: pointer;"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -447,6 +476,51 @@
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-history"></i>';
             alert('❌ Terjadi kesalahan sistem: ' + error.message);
+        });
+    }
+
+    function testKoneksiGemini() {
+        const apiKey = document.querySelector('input[name="ai_gemini_key"]').value;
+        const model = document.getElementById('ai_gemini_model').value;
+        const statusDiv = document.getElementById('test-ai-status');
+        const btn = event.currentTarget;
+
+        if (!apiKey) {
+            alert('Silakan masukkan API Key terlebih dahulu.');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghubungkan...';
+        statusDiv.style.display = 'none';
+
+        fetch('/admin/pengaturan/test-gemini', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ api_key: apiKey, model: model })
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-plug"></i> Test Koneksi API';
+            statusDiv.style.display = 'block';
+            statusDiv.innerText = data.pesan;
+            
+            if (data.berhasil) {
+                statusDiv.style.background = '#dcfce7';
+                statusDiv.style.color = '#166534';
+            } else {
+                statusDiv.style.background = '#fee2e2';
+                statusDiv.style.color = '#991b1b';
+            }
+        })
+        .catch(error => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-plug"></i> Test Koneksi API';
+            alert('Terjadi kesalahan: ' + error.message);
         });
     }
 </script>

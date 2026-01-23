@@ -29,7 +29,7 @@ class DatabaseBackup
         // PostgreSQL menggunakan PGPASSWORD env variable untuk password
         $command = "PGPASSWORD='{$dbPass}' {$pgDumpPath} -h {$dbHost} -p {$dbPort} -U {$dbUser} {$dbName} > {$path}";
 
-        exec($command, $output, $returnVar);
+        \exec($command, $output, $returnVar);
 
         if ($returnVar === 0) {
             return [
@@ -69,7 +69,7 @@ class DatabaseBackup
         // PostgreSQL restore menggunakan psql
         $command = "PGPASSWORD='{$dbPass}' {$pgRestorePath} -h {$dbHost} -p {$dbPort} -U {$dbUser} {$dbName} < {$backupPath} 2>&1";
 
-        exec($command, $output, $returnVar);
+        \exec($command, $output, $returnVar);
 
         if ($returnVar === 0) {
             return [

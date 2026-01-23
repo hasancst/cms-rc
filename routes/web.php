@@ -26,7 +26,7 @@ Route::get('/video/{slug}', [PublicController::class, 'detailVideo']);
 Route::get('/portofolio', [PublicController::class, 'portofolio']);
 Route::get('/kontak', [PublicController::class, 'kontak']);
 Route::post('/kontak', [PublicController::class, 'kirimKontak']);
-Route::get('/tentang', [PublicController::class, 'tentang']);
+Route::get('/tentang-kami', [PublicController::class, 'tentang']);
 Route::get('/redaksi', [PublicController::class, 'redaksi']);
 Route::get('/kebijakan', [PublicController::class, 'kebijakan']);
 Route::get('/syarat', [PublicController::class, 'syarat']);
@@ -55,6 +55,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::middleware('cek_izin:kelola-pengaturan')->group(function () {
         Route::get('/pengaturan', [AdminController::class, 'indeksPengaturan']);
         Route::post('/pengaturan', [AdminController::class, 'simpanPengaturan']);
+        Route::post('/pengaturan/test-gemini', [AdminController::class, 'testGemini']);
         Route::post('/media/unggah', [AdminController::class, 'unggahMedia'])->name('admin.media.unggah');
         
         // Backup routes
