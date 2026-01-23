@@ -73,7 +73,7 @@
             @if($berita->gambar_utama)
                 <div style="margin-bottom: 30px; border-radius: 12px; overflow: hidden;">
                     <img src="{{ $imgUrl }}" style="width: 100%; height: auto;" alt="{{ $berita->judul }}">
-                    <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 10px; font-style: italic;">Sumber: {{ $pengaturan['nama_situs'] ?? 'Rumah Cyber' }}</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 10px; font-style: italic;">Sumber: {{ $pengaturan['nama_situs'] ?? 'Rumah Koalisi' }}</p>
                 </div>
             @endif
 

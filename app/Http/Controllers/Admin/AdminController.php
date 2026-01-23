@@ -294,6 +294,18 @@ class AdminController extends Controller
             }
         }
 
+        // Pemeliharaan Mode Logic
+        if (isset($data['fitur_pemeliharaan'])) {
+            if ($data['fitur_pemeliharaan'] == '1') {
+                Artisan::call('down', [
+                    '--render' => 'errors.503',
+                    '--secret' => 'admin-bypass'
+                ]);
+            } else {
+                Artisan::call('up');
+            }
+        }
+
         return back()->with('berhasil', 'Pengaturan sistem berhasil diperbarui.');
     }
 

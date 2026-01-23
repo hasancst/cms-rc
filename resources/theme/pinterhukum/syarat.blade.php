@@ -8,7 +8,7 @@
         <div style="position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
         <div style="position: relative; z-index: 1;">
             <h1 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; letter-spacing: -2px; line-height: 1;">Syarat & Ketentuan</h1>
-            <p style="font-size: 1.2rem; opacity: 0.9; max-width: 900px; margin: 0 auto; line-height: 1.6; font-weight: 500;">Ketentuan penggunaan layanan {{ $pengaturan['nama_situs'] ?? 'Rumah Cyber' }}</p>
+            <p style="font-size: 1.2rem; opacity: 0.9; max-width: 900px; margin: 0 auto; line-height: 1.6; font-weight: 500;">Ketentuan penggunaan layanan {{ $pengaturan['nama_situs'] ?? 'Rumah Koalisi' }}</p>
         </div>
     </div>
 
@@ -17,12 +17,12 @@
             <div style="color: var(--text-main); line-height: 1.8;">
                 <h2 style="color: var(--primary); margin-bottom: 25px;">Penerimaan Ketentuan</h2>
                 <p style="margin-bottom: 30px;">
-                    Dengan mengakses dan menggunakan situs {{ $pengaturan['nama_situs'] ?? 'Rumah Cyber' }}, Anda dianggap telah membaca, memahami, dan menyetujui semua syarat dan ketentuan yang berlaku di bawah ini.
+                    Dengan mengakses dan menggunakan situs {{ $pengaturan['nama_situs'] ?? 'Rumah Koalisi' }}, Anda dianggap telah membaca, memahami, dan menyetujui semua syarat dan ketentuan yang berlaku di bawah ini.
                 </p>
 
                 <h3 style="margin-bottom: 20px;">1. Hak Kekayaan Intelektual</h3>
                 <p style="margin-bottom: 30px;">
-                    Seluruh konten yang dipublikasikan di situs ini (artikel, gambar, video, logo) adalah milik {{ $pengaturan['nama_situs'] ?? 'Rumah Cyber' }} dilindungi oleh Undang-Undang Hak Cipta. Penggunaan kembali konten untuk tujuan komersial tanpa izin tertulis adalah dilarang.
+                    Seluruh konten yang dipublikasikan di situs ini (artikel, gambar, video, logo) adalah milik {{ $pengaturan['nama_situs'] ?? 'Rumah Koalisi' }} dilindungi oleh Undang-Undang Hak Cipta. Penggunaan kembali konten untuk tujuan komersial tanpa izin tertulis adalah dilarang.
                 </p>
 
                 <h3 style="margin-bottom: 20px;">2. Batasan Tanggung Jawab</h3>

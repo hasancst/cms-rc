@@ -17,7 +17,7 @@
             <div style="color: var(--text-main); line-height: 1.8;">
                 <h2 style="color: var(--primary); margin-bottom: 25px;">Pendahuluan</h2>
                 <p style="margin-bottom: 30px;">
-                    Selamat datang di {{ $pengaturan['nama_situs'] ?? 'Rumah Cyber' }}. Kami sangat menghargai privasi Anda dan berkomitmen untuk melindungi data pribadi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat menggunakan situs kami.
+                    Selamat datang di {{ $pengaturan['nama_situs'] ?? 'Rumah Koalisi' }}. Kami sangat menghargai privasi Anda dan berkomitmen untuk melindungi data pribadi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat menggunakan situs kami.
                 </p>
 
                 <h3 style="margin-bottom: 20px;">1. Informasi yang Kami Kumpulkan</h3>
@@ -45,7 +45,7 @@
 
                 <h3 style="margin-bottom: 20px;">5. Perubahan Kebijakan</h3>
                 <p style="margin-bottom: 30px;">
-                    {{ $pengaturan['nama_situs'] ?? 'Rumah Cyber' }} berhak mengubah kebijakan privasi ini sewaktu-waktu. Kami akan memberitahukan perubahan signifikan melalui halaman ini.
+                    {{ $pengaturan['nama_situs'] ?? 'Rumah Koalisi' }} berhak mengubah kebijakan privasi ini sewaktu-waktu. Kami akan memberitahukan perubahan signifikan melalui halaman ini.
                 </p>
             </div>
         </div>

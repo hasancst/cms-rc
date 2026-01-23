@@ -13,9 +13,9 @@ class PengaturanSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            'nama_situs' => 'CMS Rumah Cyber',
+            'nama_situs' => 'Rumah Koalisi',
             'deskripsi_situs' => 'Portal informasi dan edukasi terpercaya untuk masyarakat Indonesia.',
-            'email_admin' => 'admin@rumahcyber.com',
+            'email_admin' => 'admin@rumahkoalisi.id',
             'alamat' => 'Jl. Panglima Sudirman No 24 Jakarta - Indonesia',
             'optimasi_redis_aktif' => '0',
             'optimasi_redis_host' => '127.0.0.1',

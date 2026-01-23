@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo('/mlebu');
+        $middleware->preventRequestsDuringMaintenance(except: [
+            '/mlebu',
+        ]);
         $middleware->trustProxies(at: '*');
         $middleware->alias([
             'cek_izin' => \App\Http\Middleware\CekIzin::class,

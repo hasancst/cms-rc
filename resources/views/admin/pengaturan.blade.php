@@ -45,6 +45,7 @@
         <div class="tab-item" onclick="switchTab('email')">Konfigurasi Email</div>
         <div class="tab-item" onclick="switchTab('keamanan')">Keamanan</div>
         <div class="tab-item" onclick="switchTab('backup')">Backup DB</div>
+        <div class="tab-item" onclick="switchTab('pemeliharaan')">Pemeliharaan</div>
     </div>
 
     <form action="/admin/pengaturan" method="POST" enctype="multipart/form-data">
@@ -67,7 +68,7 @@
                     </div>
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600;">Nama Situs</label>
-                        <input type="text" name="nama_situs" value="{{ $pengaturan['nama_situs'] ?? 'CMS Rumah Cyber' }}">
+                        <input type="text" name="nama_situs" value="{{ $pengaturan['nama_situs'] ?? 'CMS Rumah Koalisi' }}">
                     </div>
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600;">Deskripsi Situs</label>
@@ -79,7 +80,7 @@
                     <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;">Kontak</h3>
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600;">Email Admin</label>
-                        <input type="email" name="email_admin" value="{{ $pengaturan['email_admin'] ?? 'admin@rumahcyber.com' }}">
+                        <input type="email" name="email_admin" value="{{ $pengaturan['email_admin'] ?? 'admin@rumahkoalisi.id' }}">
                     </div>
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600;">Alamat Kantor</label>
@@ -234,7 +235,7 @@
                     </div>
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600;">Nama Pengirim (From Name)</label>
-                        <input type="text" name="mail_from_name" value="{{ $pengaturan['mail_from_name'] ?? '' }}" placeholder="Admin Rumah Cyber">
+                        <input type="text" name="mail_from_name" value="{{ $pengaturan['mail_from_name'] ?? '' }}" placeholder="Admin Rumah Koalisi">
                     </div>
                 </div>
             </div>
@@ -314,6 +315,45 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Tab Pemeliharaan -->
+        <div id="pemeliharaan" class="tab-content">
+            <div style="max-width: 600px;">
+                <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;">Mode Pemeliharaan</h3>
+                <div style="background: #fff8e1; border-left: 5px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+                    <p style="color: #856404; font-size: 0.9rem; margin-bottom: 0;">
+                        <i class="fas fa-exclamation-triangle"></i> <strong>Penting:</strong> Mengaktifkan mode pemeliharaan akan membuat website tidak bisa diakses oleh publik. Anda masih bisa mengakses admin melalui URL bypass jika diperlukan.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Status Pemeliharaan</label>
+                    <select name="fitur_pemeliharaan" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                        <option value="0" {{ ($pengaturan['fitur_pemeliharaan'] ?? '0') == '0' ? 'selected' : '' }}>Situs Aktif (Normal)</option>
+                        <option value="1" {{ ($pengaturan['fitur_pemeliharaan'] ?? '0') == '1' ? 'selected' : '' }}>Mode Pemeliharaan (Under Maintenance)</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Target Waktu Selesai (Countdown)</label>
+                    <input type="datetime-local" name="pemeliharaan_sampai" value="{{ $pengaturan['pemeliharaan_sampai'] ?? '' }}" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Waktu ini akan ditampilkan pada halaman countdown.</p>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Pesan Tambahan</label>
+                    <textarea name="pemeliharaan_pesan" rows="3" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;" placeholder="Contoh: Kami sedang melakukan upgrade server.">{{ $pengaturan['pemeliharaan_pesan'] ?? 'Rumahnya Masih Dibangun' }}</textarea>
+                </div>
+                
+                @if(($pengaturan['fitur_pemeliharaan'] ?? '0') == '1')
+                <div style="margin-top: 10px; padding: 10px; background: #e3f2fd; border-radius: 8px;">
+                    <p style="font-size: 0.85rem; color: #0d47a1; margin-bottom: 0;">
+                        <i class="fas fa-info-circle"></i> URL Bypass: <a href="{{ url('/') }}/admin-bypass" target="_blank" style="font-weight: bold; color: #0d47a1;">{{ url('/') }}/admin-bypass</a>
+                    </p>
+                </div>
+                @endif
             </div>
         </div>
 

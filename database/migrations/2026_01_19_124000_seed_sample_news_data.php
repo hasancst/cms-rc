@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $penulisId = 1; // Admin Rumah Cyber
+        $penulisId = 1; // Admin Rumah Koalisi
 
         // Define categories we need
         $categories = [

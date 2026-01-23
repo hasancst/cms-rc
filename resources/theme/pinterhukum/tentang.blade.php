@@ -18,7 +18,7 @@
                 <div>
                     <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 25px;">Visi & Misi Kami</h2>
                     <p style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px;">
-                        {{ $pengaturan['nama_situs'] ?? 'Rumah Cyber' }} hadir sebagai solusi bagi masyarakat yang ingin memahami hukum dengan cara yang lebih sederhana dan menyenangkan. Kami percaya bahwa setiap warga negara berhak mendapatkan akses informasi hukum yang akurat dan mudah dipahami.
+                        {{ $pengaturan['nama_situs'] ?? 'Rumah Koalisi' }} hadir sebagai solusi bagi masyarakat yang ingin memahami hukum dengan cara yang lebih sederhana dan menyenangkan. Kami percaya bahwa setiap warga negara berhak mendapatkan akses informasi hukum yang akurat dan mudah dipahami.
                     </p>
                     <p style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.8;">
                         Visi kami adalah menjadi media edukasi hukum nomor satu di Indonesia yang mampu mencerdaskan kehidupan bangsa melalui literasi hukum yang inklusif.

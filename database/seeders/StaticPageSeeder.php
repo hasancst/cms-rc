@@ -23,7 +23,7 @@ class StaticPageSeeder extends Seeder
 <div class="static-page-content" style="padding: 40px 0;">
     <div style="max-width: 900px; margin: 0 auto; line-height: 1.8; color: #334155; font-size: 1.1rem;">
         <p style="margin-bottom: 25px;">
-            Selamat datang di <strong>Rumah Cyber</strong>, platform informasi dan edukasi terpercaya yang berdedikasi untuk memberikan pemahaman mendalam mengenai perkembangan teknologi, keamanan siber, dan aspek hukum digital di Indonesia.
+            Selamat datang di <strong>Rumah Koalisi</strong>, platform informasi dan edukasi terpercaya yang berdedikasi untuk memberikan pemahaman mendalam mengenai perkembangan teknologi, keamanan siber, dan aspek hukum digital di Indonesia.
         </p>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 50px 0;">
@@ -52,7 +52,7 @@ class StaticPageSeeder extends Seeder
 <div class="static-page-content" style="padding: 40px 0;">
     <div style="max-width: 900px; margin: 0 auto; line-height: 1.8; color: #334155; font-size: 1.1rem;">
         <p style="margin-bottom: 30px;">
-            Tim Redaksi <strong>Rumah Cyber</strong> terdiri dari para jurnalis, analis keamanan siber, dan pakar hukum yang memiliki integritas tinggi dan komitmen untuk menyajikan informasi yang objektif.
+            Tim Redaksi <strong>Rumah Koalisi</strong> terdiri dari para jurnalis, analis keamanan siber, dan pakar hukum yang memiliki integritas tinggi dan komitmen untuk menyajikan informasi yang objektif.
         </p>
 
         <div style="margin-bottom: 40px; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px;">
@@ -102,7 +102,7 @@ class StaticPageSeeder extends Seeder
     <div style="max-width: 900px; margin: 0 auto; line-height: 1.8; color: #334155;">
         <p style="margin-bottom: 20px;">Dengan mengakses situs ini, Anda menyetujui syarat-syarat penggunaan sebagaimana tercantum di bawah ini.</p>
         <h3 style="margin: 30px 0 15px; color: #0f172a; font-weight: 700;">Hak Kekayaan Intelektual</h3>
-        <p>Seluruh materi di situs ini adalah milik Rumah Cyber dan dilindungi oleh undang-undang hak cipta.</p>
+        <p>Seluruh materi di situs ini adalah milik Rumah Koalisi dan dilindungi oleh undang-undang hak cipta.</p>
     </div>
 </div>',
                 'status' => 'publikasi',

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $pengaturan['nama_situs'] ?? 'Rumah Cyber' }} - @yield('title', 'Beranda')</title>
+    <title>{{ $pengaturan['nama_situs'] ?? 'Rumah Koalisi' }} - @yield('title', 'Beranda')</title>
     <meta name="description" content="{{ $pengaturan['deskripsi_situs'] ?? '' }}">
     
     <!-- Fonts -->
@@ -577,7 +577,7 @@
                         <img src="/storage/{{ $pengaturan['logo'] }}" alt="{{ $pengaturan['nama_situs'] ?? 'Logo' }}" style="max-height: 50px;">
                     @else
                         <i class="fas fa-balance-scale"></i>
-                        <span>{{ strtoupper($pengaturan['nama_situs'] ?? 'Rumah Cyber') }}</span>
+                        <span>{{ strtoupper($pengaturan['nama_situs'] ?? 'Rumah Koalisi') }}</span>
                     @endif
                 </a>
                 <ul class="nav-links" style="margin-left: 10px;">
@@ -632,7 +632,7 @@
                         @if(isset($pengaturan['logo']) && $pengaturan['logo'])
                             <img src="/storage/{{ $pengaturan['logo'] }}" alt="{{ $pengaturan['nama_situs'] ?? 'Logo' }}" style="max-height: 50px;">
                         @else
-                            <i class="fas fa-balance-scale"></i> {{ $pengaturan['nama_situs'] ?? 'Rumah Cyber' }}
+                            <i class="fas fa-balance-scale"></i> {{ $pengaturan['nama_situs'] ?? 'Rumah Koalisi' }}
                         @endif
                     </a>
                     <p class="footer-text">
@@ -679,7 +679,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; {{ date('Y') }} {{ $pengaturan['nama_situs']}}. All Rights Reserved. Powered by Rumah Cyber.
+                &copy; {{ date('Y') }} {{ $pengaturan['nama_situs']}}. All Rights Reserved. Powered by Rumah Koalisi.
             </div>
         </div>
     </footer>
