@@ -392,9 +392,21 @@
             </a>
             @endif
             @if(in_array('berita', array_map('strtolower', $modulAktif)))
-            <a href="/admin/berita" class="nav-item {{ request()->is('admin/berita*') ? 'active' : '' }}">
-                <i class="fas fa-newspaper"></i> Berita
-            </a>
+            <div class="nav-item-group">
+                <a href="#" class="nav-item {{ request()->is('admin/berita*') ? 'active' : '' }}" onclick="event.preventDefault(); var sub = document.getElementById('berita-submenu'); var icon = this.querySelector('.arrow-icon'); if(sub.style.display === 'none'){ sub.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { sub.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
+                    <i class="fas fa-newspaper"></i>
+                    <span style="flex: 1;">Berita</span>
+                    <i class="fas fa-chevron-down arrow-icon" style="font-size: 0.8rem; transition: transform 0.3s; transform: {{ request()->is('admin/berita*') ? 'rotate(180deg)' : 'rotate(0deg)' }}"></i>
+                </a>
+                <div id="berita-submenu" style="display: {{ request()->is('admin/berita*') ? 'block' : 'none' }}; padding-left: 15px; overflow: hidden; transition: all 0.3s;">
+                    <a href="/admin/berita" class="nav-item {{ request()->is('admin/berita') || request()->is('admin/berita/tambah') || request()->is('admin/berita/ubah*') ? 'active' : '' }}" style="font-size: 0.9rem;">
+                        <i class="fas fa-list" style="width: 18px;"></i> Semua Berita
+                    </a>
+                    <a href="/admin/berita/kategori" class="nav-item {{ request()->is('admin/berita/kategori*') ? 'active' : '' }}" style="font-size: 0.9rem;">
+                        <i class="fas fa-folder-open" style="width: 18px;"></i> Kategori
+                    </a>
+                </div>
+            </div>
             @endif
             @if(in_array('iklan', array_map('strtolower', $modulAktif)))
             <a href="/admin/iklan" class="nav-item {{ request()->is('admin/iklan*') ? 'active' : '' }}">
