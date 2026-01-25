@@ -77,15 +77,7 @@
                 </div>
             @endif
 
-            <!-- AI Insight Section (GEO/LLMO Optimization) -->
-            <div style="background: #fdf2f2; border-left: 4px solid #ef4444; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-                <h4 style="color: #991b1b; margin-bottom: 10px;"><i class="fas fa-robot"></i> Ringkasan Utama (AI Insights)</h4>
-                <ul style="font-size: 0.95rem; color: #7f1d1d; padding-left: 20px;">
-                    <li><strong>Konteks:</strong> Analisis mendalam mengenai {{ $berita->judul }}.</li>
-                    <li><strong>Poin Utama:</strong> {{ $berita->ringkasan }}</li>
-                    <li><strong>Entitas Terkait:</strong> {{ $berita->tags->pluck('nama')->implode(', ') }}</li>
-                </ul>
-            </div>
+
 
             <div class="entry-content" style="font-size: 1.1rem; line-height: 1.8; color: #2d3748;">
                 {!! $berita->isi !!}
