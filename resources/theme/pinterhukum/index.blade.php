@@ -116,7 +116,7 @@
             <!-- Box 1: Main Hero -->
             @if(isset($unggulan[0]))
             <div class="hero-main">
-                <a href="/berita/{{ $unggulan[0]->slug }}">
+                <a href="/berita/{{ $unggulan[0]->kategoris->first()->slug ?? 'umum' }}/{{ $unggulan[0]->slug }}">
                     @php
                         $imgMain = $unggulan[0]->gambar_utama;
                         if ($imgMain && !str_starts_with($imgMain, 'http')) { $imgMain = '/storage/' . $imgMain; }
@@ -136,7 +136,7 @@
                 @php $side1 = $unggulan->skip(1)->take(2); @endphp
                 @foreach($side1 as $u)
                 <div class="hero-item">
-                    <a href="/berita/{{ $u->slug }}">
+                    <a href="/berita/{{ $u->kategoris->first()->slug ?? 'umum' }}/{{ $u->slug }}">
                         @php
                             $imgS = $u->gambar_utama;
                             if ($imgS && !str_starts_with($imgS, 'http')) { $imgS = '/storage/' . $imgS; }
@@ -164,7 +164,7 @@
                 @endphp
                 @foreach($side2 as $u)
                 <div class="hero-item">
-                    <a href="/berita/{{ $u->slug }}">
+                    <a href="/berita/{{ $u->kategoris->first()->slug ?? 'umum' }}/{{ $u->slug }}">
                         @php
                             $imgS2 = $u->gambar_utama;
                             if ($imgS2 && !str_starts_with($imgS2, 'http')) { $imgS2 = '/storage/' . $imgS2; }
@@ -194,7 +194,7 @@
                 @foreach($beritaTerbaru->skip(5) as $bs)
                     <div class="swiper-slide">
                         <div style="background: #fff; border: 1px solid #eee; border-radius: 10px; overflow: hidden; height: 100%;">
-                            <a href="/berita/{{ $bs->slug }}">
+                            <a href="/berita/{{ $bs->kategoris->first()->slug ?? 'umum' }}/{{ $bs->slug }}">
                                 @php
                                     $imgSlid = $bs->gambar_utama;
                                     if ($imgSlid && !str_starts_with($imgSlid, 'http')) { $imgSlid = '/storage/' . $imgSlid; }
@@ -225,7 +225,7 @@
                 <h2 class="section-title">Informasi Utama</h2>
                 @forelse($beritaTerbaru as $b)
                     <article class="post-card" style="display: flex; gap: 20px; margin-bottom: 25px; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #f1f5f9;">
-                        <a href="/berita/{{ $b->slug }}" style="flex-shrink: 0;">
+                        <a href="/berita/{{ $b->kategoris->first()->slug ?? 'umum' }}/{{ $b->slug }}" style="flex-shrink: 0;">
                             @php
                                 $imgL = $b->gambar_utama;
                                 if ($imgL && !str_starts_with($imgL, 'http')) { $imgL = '/storage/' . $imgL; }
@@ -238,7 +238,7 @@
                                 <span style="color: var(--primary); font-weight: 800;">{{ $b->kategoris->first()->nama ?? 'UMUM' }}</span>
                                 &bull; {{ $b->created_at->format('d M Y') }}
                             </div>
-                            <h3 style="margin: 0 0 10px; font-size: 1.1rem;"><a href="/berita/{{ $b->slug }}">{{ $b->judul }}</a></h3>
+                            <h3 style="margin: 0 0 10px; font-size: 1.1rem;"><a href="/berita/{{ $b->kategoris->first()->slug ?? 'umum' }}/{{ $b->slug }}">{{ $b->judul }}</a></h3>
                             <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">{{ str($b->ringkasan)->limit(100) }}</p>
                         </div>
                     </article>
@@ -272,7 +272,7 @@
                         @foreach($beritaPopuler as $bp)
                         <li style="margin-bottom: 12px; display: flex; gap: 10px;">
                             <span style="font-weight: 900; color: #ddd; font-size: 1.2rem;">{{ $loop->iteration }}</span>
-                            <a href="/berita/{{ $bp->slug }}" style="font-size: 0.85rem; font-weight: 700; line-height: 1.3;">{{ $bp->judul }}</a>
+                            <a href="/berita/{{ $bp->kategoris->first()->slug ?? 'umum' }}/{{ $bp->slug }}" style="font-size: 0.85rem; font-weight: 700; line-height: 1.3;">{{ $bp->judul }}</a>
                         </li>
                         @endforeach
                     </ul>

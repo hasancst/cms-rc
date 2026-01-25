@@ -38,7 +38,7 @@ class PublicController extends Controller
             ->paginate(10);
 
         // Sidebar: Berita Terpopuler (Sederhana ambil terbaru)
-        $beritaPopuler = Berita::latest()->limit(5)->get();
+        $beritaPopuler = Berita::with('kategoris')->latest()->limit(5)->get();
 
         // Iklan Top Atas (jika ada modul iklan)
         $iklanTop = null;
@@ -98,15 +98,15 @@ class PublicController extends Controller
         return view('tema::index', compact('pengaturan', 'unggulan', 'beritaTerbaru', 'beritaPopuler', 'iklanTop', 'videoTerbaru', 'slideshow', 'portofolios', 'faqs', 'layanans', 'portfolioTags'));
     }
 
-    public function detailBerita($slug)
+    public function detailBerita($kategori, $slug)
     {
         $berita = Berita::with(['kategoris', 'tags', 'penulis'])
             ->where('slug', $slug)
             ->firstOrFail();
             
         $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
-        $beritaTerkait = Berita::latest()->limit(3)->get();
-        $topBerita = Berita::latest()->limit(5)->get();
+        $beritaTerkait = Berita::with('kategoris')->latest()->limit(3)->get();
+        $topBerita = Berita::with('kategoris')->latest()->limit(5)->get();
         $latestVideos = \App\Modul\Video\Model\Video::where('aktif', true)->latest()->limit(3)->get();
 
         return view('tema::berita', compact('berita', 'pengaturan', 'beritaTerkait', 'topBerita', 'latestVideos'));

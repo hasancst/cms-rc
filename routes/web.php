@@ -19,7 +19,7 @@ Route::get('/kategori-berita/{slug}', [PublicController::class, 'kategoriBerita'
 Route::get('/kategori-politik/{slug}', function($slug) { return redirect('/kategori-berita/'.$slug); });
 Route::get('/berita/kategori-berita/{slug}', [PublicController::class, 'kategoriBerita']);
 Route::get('/politik', function() { return redirect('/kategori-berita/politik'); });
-Route::get('/berita/{slug}', [PublicController::class, 'detailBerita']);
+Route::get('/berita/{kategori}/{slug}', [PublicController::class, 'detailBerita']);
 Route::get('/artikel', [PublicController::class, 'artikel']);
 Route::get('/artikel/kategori/{slug}', [PublicController::class, 'kategoriArtikel']);
 Route::get('/artikel/{slug}', [PublicController::class, 'detailArtikel']);
