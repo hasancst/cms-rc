@@ -56,10 +56,10 @@
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Jenis Menu</label>
                 <div style="display: flex; gap: 15px;">
                     <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                        <input type="radio" name="jenis_menu" value="custom" checked onchange="toggleMenuType()"> Tautan Kustom
+                        <input type="radio" name="jenis_menu" value="modul" checked onchange="toggleMenuType()"> Modul Sistem
                     </label>
                     <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                        <input type="radio" name="jenis_menu" value="modul" onchange="toggleMenuType()"> Modul Sistem
+                        <input type="radio" name="jenis_menu" value="custom" onchange="toggleMenuType()"> Tautan Kustom
                     </label>
                 </div>
             </div>
@@ -377,5 +377,6 @@
 
     // Init
     updateParentOptions();
+    toggleMenuType();
 </script>
 @endsection
