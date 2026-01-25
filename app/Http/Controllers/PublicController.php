@@ -134,7 +134,7 @@ class PublicController extends Controller
     {
         $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
         
-        $kategori = DB::table('kategori_berita')->where('slug', $slug)->first();
+        $kategori = DB::table('kategori_berita')->where('slug', strtolower($slug))->first();
         if (!$kategori) abort(404);
 
         $beritaList = Berita::whereHas('kategoris', function($q) use ($kategori) {
@@ -152,7 +152,7 @@ class PublicController extends Controller
     {
         $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
         
-        $kategori = DB::table('kategori_artikel')->where('slug', $slug)->first();
+        $kategori = DB::table('kategori_artikel')->where('slug', strtolower($slug))->first();
         if (!$kategori) abort(404);
 
         $artikelList = Artikel::whereHas('kategori', function($q) use ($kategori) {
