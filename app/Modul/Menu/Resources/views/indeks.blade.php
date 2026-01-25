@@ -107,7 +107,7 @@
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Posisi Menu</label>
                 <select name="posisi" id="posisi_menu" onchange="updateParentOptions()">
-                    <option value="header">Header (Navigasi Atas)</option>
+                    <option value="header">Main Menu (Navigasi Atas)</option>
                     <option value="footer">Footer (Navigasi Bawah)</option>
                 </select>
             </div>
@@ -145,8 +145,8 @@
         <div class="card">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
                 <i class="fas fa-bars" style="color: #4e73df; font-size: 1.2rem;"></i>
-                <h3 style="margin-bottom: 0;">Top Navigation (Header)</h3>
-                <span class="badge" style="background: #ebf1ff; color: #4e73df; font-weight: 800;">HEADER</span>
+                <h3 style="margin-bottom: 0;">Top Navigation (Main Menu)</h3>
+                <span class="badge" style="background: #ebf1ff; color: #4e73df; font-weight: 800;">MAIN MENU</span>
             </div>
             
             <div id="header-menu-list" style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border); min-height: 50px;">
