@@ -72,7 +72,12 @@
                     <option value="berita">Berita</option>
                     <option value="artikel">Artikel</option>
                     <option value="video">Video</option>
+                    <option value="portofolio">Portofolio</option>
                     <option value="kontak">Kontak</option>
+                    <option value="tentang">Tentang Kami</option>
+                    <option value="redaksi">Redaksi</option>
+                    <option value="kebijakan">Kebijakan Privasi</option>
+                    <option value="syarat">Syarat & Ketentuan</option>
                 </select>
 
                 <div id="kategori-berita" style="display: none; margin-top: 10px;">
@@ -307,6 +312,11 @@
         if (modul === 'beranda') { urlInput.value = '/'; labelInput.value = 'Beranda'; }
         else if (modul === 'kontak') { urlInput.value = '/kontak'; labelInput.value = 'Kontak'; }
         else if (modul === 'video') { urlInput.value = '/video'; labelInput.value = 'Video'; }
+        else if (modul === 'portofolio') { urlInput.value = '/portofolio'; labelInput.value = 'Portofolio'; }
+        else if (modul === 'tentang') { urlInput.value = '/tentang-kami'; labelInput.value = 'Tentang Kami'; }
+        else if (modul === 'redaksi') { urlInput.value = '/redaksi'; labelInput.value = 'Redaksi'; }
+        else if (modul === 'kebijakan') { urlInput.value = '/kebijakan'; labelInput.value = 'Kebijakan Privasi'; }
+        else if (modul === 'syarat') { urlInput.value = '/syarat'; labelInput.value = 'Syarat & Ketentuan'; }
         else if (modul === 'berita') {
             katBerita.style.display = 'block';
             const slug = document.getElementById('select-kategori-berita').value;
