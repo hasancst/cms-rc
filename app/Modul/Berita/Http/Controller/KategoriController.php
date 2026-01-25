@@ -4,6 +4,7 @@ namespace App\Modul\Berita\Http\Controller;
 
 use App\Http\Controllers\Controller;
 use App\Modul\Berita\Model\Kategori;
+use App\Modul\Menu\Model\Menu;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -53,5 +54,24 @@ class KategoriController extends Controller
     {
         Kategori::destroy($id);
         return back()->with('berhasil', 'Kategori berhasil dihapus.');
+    }
+
+    public function keMenu(Request $request, $id)
+    {
+        $kategori = Kategori::findOrFail($id);
+        $posisi = $request->posisi ?? 'header';
+
+        // Cari urutan terakhir
+        $urutan = Menu::where('posisi', $posisi)->max('urutan') ?? 0;
+
+        Menu::create([
+            'label' => $kategori->nama,
+            'url' => '/berita/kategori/' . $kategori->slug,
+            'posisi' => $posisi,
+            'urutan' => $urutan + 1,
+            'target' => '_self'
+        ]);
+
+        return back()->with('berhasil', "Kategori '{$kategori->nama}' berhasil ditambahkan ke menu {$posisi}.");
     }
 }

@@ -25,7 +25,8 @@
                 <tr>
                     <th>Nama</th>
                     <th>Slug</th>
-                    <th>Jumlah Berita</th>
+                    <th>Berita</th>
+                    <th>Jadikan Menu</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -35,6 +36,24 @@
                     <td><strong>{{ $k->nama }}</strong></td>
                     <td><code>{{ $k->slug }}</code></td>
                     <td>{{ $k->berita_count ?? 0 }}</td>
+                    <td>
+                        <div style="display: flex; gap: 5px;">
+                            <form action="/admin/berita/kategori/ke-menu/{{ $k->id }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="posisi" value="header">
+                                <button type="submit" class="btn" style="padding: 5px 10px; font-size: 0.75rem; background: var(--primary);" title="Tambah ke Header">
+                                    <i class="fas fa-heading"></i> Header
+                                </button>
+                            </form>
+                            <form action="/admin/berita/kategori/ke-menu/{{ $k->id }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="posisi" value="footer">
+                                <button type="submit" class="btn" style="padding: 5px 10px; font-size: 0.75rem; background: #64748b;" title="Tambah ke Footer">
+                                    <i class="fas fa-shoe-prints"></i> Footer
+                                </button>
+                            </form>
+                        </div>
+                    </td>
                     <td>
                         <div style="display: flex; gap: 10px;">
                             <a href="/admin/berita/kategori/ubah/{{ $k->id }}" style="color: var(--primary);">
@@ -51,7 +70,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" style="text-align: center;">Belum ada kategori.</td>
+                    <td colspan="5" style="text-align: center;">Belum ada kategori.</td>
                 </tr>
                 @endforelse
             </tbody>
