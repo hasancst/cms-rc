@@ -356,6 +356,25 @@
         toggleMenuType();
     }
 
+    // Auto-slug Logic
+    function slugify(text) {
+        return '/' + text.toString().toLowerCase()
+            .replace(/\s+/g, '-')           // Replace spaces with -
+            .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+            .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+            .replace(/^-+/, '')             // Trim - from start of text
+            .replace(/-+$/, '');            // Trim - from end of text
+    }
+
+    document.getElementById('label-menu').addEventListener('input', function() {
+        const type = document.querySelector('input[name="jenis_menu"]:checked').value;
+        const urlInput = document.getElementById('url-menu');
+        
+        if (type === 'custom') {
+            urlInput.value = slugify(this.value);
+        }
+    });
+
     // Init
     updateParentOptions();
 </script>
