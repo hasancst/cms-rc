@@ -27,44 +27,6 @@
 
             <!-- Kolom Samping (Meta) -->
             <div>
-                <!-- Gambar Utama -->
-                <div style="margin-bottom: 25px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
-                    <label style="display: block; margin-bottom: 12px; font-weight: 600;">Gambar Utama</label>
-                    <div id="image-preview" style="width: 100%; height: 150px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 2px dashed #cbd5e1; overflow: hidden;">
-                        <i class="fas fa-image" style="font-size: 2rem; color: #94a3b8;"></i>
-                    </div>
-                    <input type="file" name="gambar_utama" id="image-input" accept="image/*" style="font-size: 0.8rem;">
-                </div>
-
-                <!-- Kategori -->
-                <div style="margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <label style="font-weight: 600;">Kategori</label>
-                        <a href="/admin/berita/kategori" style="font-size: 0.8rem; color: var(--primary); text-decoration: none;"><i class="fas fa-plus-circle"></i> Kelola</a>
-                    </div>
-                    <div style="max-height: 150px; overflow-y: auto; background: #fff; padding: 12px; border-radius: 12px; border: 1px solid var(--border);">
-                        @foreach($kategori as $k)
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px;">
-                                <input type="checkbox" name="kategori_ids[]" value="{{ $k->id }}" style="width: auto !important;">
-                                {{ $k->nama }}
-                            </label>
-                        @endforeach
-                    </div>
-                </div>
-
-                <!-- Tags -->
-                <div style="margin-bottom: 25px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Tags</label>
-                    <input type="text" name="tags" placeholder="tag1, tag2, tag3" style="font-size: 0.85rem;">
-                    <small style="color: var(--text-muted); font-size: 0.75rem; display: block; mt-1">Pisahkan dengan koma</small>
-                </div>
-
-                <!-- Unggulan -->
-                <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px; background: var(--primary-light); padding: 15px; border-radius: 12px; border: 1px solid rgba(78, 115, 223, 0.1);">
-                    <input type="checkbox" name="unggulan" id="unggulan" style="width: 20px; height: 20px; cursor: pointer;">
-                    <label for="unggulan" style="font-weight: 600; cursor: pointer; color: var(--primary);">Jadikan Berita Unggulan</label>
-                </div>
-
                 <!-- AI Magic Assistant -->
                 <div class="ai-assistant-card" style="margin-bottom: 25px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); padding: 20px; border-radius: 12px; border: none; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4); color: white; position: relative; overflow: hidden;">
                     <div style="position: absolute; top: -20px; right: -20px; font-size: 5rem; color: rgba(255,255,255,0.1); transform: rotate(15deg); pointer-events: none;">
@@ -109,6 +71,47 @@
                         Tulis berita untuk melihat analisis SEO.
                     </div>
                 </div>
+
+                <!-- Gambar Utama -->
+                <div style="margin-bottom: 25px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+                    <label style="display: block; margin-bottom: 12px; font-weight: 600;">Gambar Utama</label>
+                    <div id="image-preview" style="width: 100%; height: 150px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 2px dashed #cbd5e1; overflow: hidden;">
+                        <i class="fas fa-image" style="font-size: 2rem; color: #94a3b8;"></i>
+                    </div>
+                    <input type="file" name="gambar_utama" id="image-input" accept="image/*" style="font-size: 0.8rem;">
+                </div>
+
+                <!-- Kategori -->
+                <div style="margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label style="font-weight: 600;">Kategori</label>
+                        <a href="/admin/berita/kategori" style="font-size: 0.8rem; color: var(--primary); text-decoration: none;"><i class="fas fa-plus-circle"></i> Kelola</a>
+                    </div>
+                    <div style="max-height: 150px; overflow-y: auto; background: #fff; padding: 12px; border-radius: 12px; border: 1px solid var(--border);">
+                        @foreach($kategori as $k)
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px;">
+                                <input type="checkbox" name="kategori_ids[]" value="{{ $k->id }}" style="width: auto !important;">
+                                {{ $k->nama }}
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Tags -->
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Tags</label>
+                    <input type="text" name="tags" placeholder="tag1, tag2, tag3" style="font-size: 0.85rem;">
+                    <small style="color: var(--text-muted); font-size: 0.75rem; display: block; mt-1">Pisahkan dengan koma</small>
+                </div>
+
+                <!-- Unggulan -->
+                <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px; background: var(--primary-light); padding: 15px; border-radius: 12px; border: 1px solid rgba(78, 115, 223, 0.1);">
+                    <input type="checkbox" name="unggulan" id="unggulan" style="width: 20px; height: 20px; cursor: pointer;">
+                    <label for="unggulan" style="font-weight: 600; cursor: pointer; color: var(--primary);">Jadikan Berita Unggulan</label>
+                </div>
+
+
+
 
                 <button type="submit" class="btn" style="width: 100%; justify-content: center; padding: 15px;">
                     <i class="fas fa-save"></i> Terbitkan Berita

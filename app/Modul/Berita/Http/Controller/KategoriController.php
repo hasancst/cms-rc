@@ -30,6 +30,7 @@ class KategoriController extends Controller
         Kategori::create([
             'nama' => $request->nama,
             'slug' => str()->slug($request->nama),
+            'deskripsi' => $request->deskripsi,
         ]);
 
         return back()->with('berhasil', 'Kategori baru berhasil ditambahkan.');
@@ -51,6 +52,7 @@ class KategoriController extends Controller
         $kategori->update([
             'nama' => $request->nama,
             'slug' => str()->slug($request->nama),
+            'deskripsi' => $request->deskripsi,
         ]);
 
         return redirect('/admin/berita/kategori')->with('berhasil', 'Kategori berhasil diperbarui.');

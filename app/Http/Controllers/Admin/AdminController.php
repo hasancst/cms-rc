@@ -301,6 +301,21 @@ class AdminController extends Controller
                     '--render' => 'errors.503',
                     '--secret' => 'admin-bypass'
                 ]);
+                
+                // Manual update of the down file since some versions of Artisan::call('down') 
+                // might not support multiple --except flags easily via array
+                $downFile = storage_path('framework/down');
+                if (file_exists($downFile)) {
+                    $config = json_decode(file_get_contents($downFile), true);
+                    $config['except'] = array_merge($config['except'] ?? [], [
+                        'mlebu', 'mlebu/*', 'keluar', 'admin', 'admin/*'
+                    ]);
+                    // Unique and clean
+                    $config['except'] = array_values(array_unique(array_map(function($path) {
+                        return '/' . ltrim($path, '/');
+                    }, $config['except'])));
+                    file_put_contents($downFile, json_encode($config, JSON_PRETTY_PRINT));
+                }
             } else {
                 Artisan::call('up');
             }

@@ -15,8 +15,15 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo('/mlebu');
+        
+        $middleware->replace(\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class, \App\Http\Middleware\PreventRequestsDuringMaintenance::class);
+        
         $middleware->preventRequestsDuringMaintenance(except: [
             '/mlebu',
+            '/mlebu/*',
+            '/keluar',
+            '/admin',
+            '/admin/*',
         ]);
         $middleware->trustProxies(at: '*');
         $middleware->alias([

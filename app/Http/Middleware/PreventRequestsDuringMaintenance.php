@@ -14,5 +14,8 @@ class PreventRequestsDuringMaintenance extends Middleware
     protected $except = [
         '/mlebu',
         '/mlebu/*',
+        '/keluar',
+        '/admin',
+        '/admin/*',
     ];
 }

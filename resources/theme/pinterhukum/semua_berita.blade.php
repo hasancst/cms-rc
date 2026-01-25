@@ -17,7 +17,13 @@
             <span style="color: #fff; font-weight: 700;">{{ $kategori->nama }}</span>
         </nav>
         <h1 style="color: #fff; font-size: 4rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -2px;">{{ $kategori->nama }}</h1>
-        <p style="color: rgba(255,255,255,0.9); font-size: 1.25rem; max-width: 700px; margin: 0 auto; line-height: 1.6; font-weight: 500;">Kumpulan informasi dan berita hukum terbaru serta terpercaya seputar {{ strtolower($kategori->nama) }} di Indonesia.</p>
+        <p style="color: rgba(255,255,255,0.9); font-size: 1.25rem; max-width: 700px; margin: 0 auto; line-height: 1.6; font-weight: 500;">
+            @if($kategori->deskripsi)
+                {{ $kategori->deskripsi }}
+            @else
+                Kumpulan informasi dan berita hukum terbaru serta terpercaya seputar {{ strtolower($kategori->nama) }} di Indonesia.
+            @endif
+        </p>
     </div>
 </div>
 @elseif(isset($cari))

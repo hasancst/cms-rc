@@ -23,6 +23,13 @@ class LoginController extends Controller
         // Laravel expects 'password' but our DB uses 'kata_sandi'
         if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['kata_sandi']], $request->filled('remember'))) {
             $request->session()->regenerate();
+            
+            // If in maintenance mode, bypass it for this admin session
+            if (app()->isDownForMaintenance()) {
+                $cookie = cookie('laravel_maintenance', 'admin-bypass', 120);
+                return redirect()->intended('/admin')->withCookie($cookie);
+            }
+            
             return redirect()->intended('/admin');
         }
 

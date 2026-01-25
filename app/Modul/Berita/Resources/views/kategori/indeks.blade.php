@@ -13,6 +13,10 @@
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Nama Kategori</label>
                 <input type="text" name="nama" required placeholder="Contoh: Politik">
             </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Deskripsi (Otomatis muncul di frontend)</label>
+                <textarea name="deskripsi" rows="3" placeholder="Tuliskan deskripsi singkat mengenai kategori ini..."></textarea>
+            </div>
             <button type="submit" class="btn" style="width: 100%;">Simpan Kategori</button>
         </form>
     </div>
