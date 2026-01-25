@@ -32,12 +32,34 @@
             </thead>
             <tbody>
                 @forelse($kategori as $k)
+                @php
+                    $urlCheck = '/berita/kategori/' . $k->slug;
+                    $statusHeader = false;
+                    $statusFooter = false;
+                    
+                    if (isset($menuKategori[$urlCheck])) {
+                        $positions = $menuKategori[$urlCheck]->pluck('posisi')->toArray();
+                        $statusHeader = in_array('header', $positions);
+                        $statusFooter = in_array('footer', $positions);
+                    }
+                @endphp
                 <tr>
-                    <td><strong>{{ $k->nama }}</strong></td>
+                    <td>
+                        <strong>{{ $k->nama }}</strong>
+                        <div style="margin-top: 5px; display: flex; gap: 5px;">
+                            @if($statusHeader)
+                                <span class="badge" style="background: #ebf1ff; color: #4e73df; font-size: 0.65rem;" title="Ada di Antarmuka Atas">MAIN MENU</span>
+                            @endif
+                            @if($statusFooter)
+                                <span class="badge" style="background: #fff7ed; color: #c2410c; font-size: 0.65rem;" title="Ada di Tautan Cepat">FOOTER</span>
+                            @endif
+                        </div>
+                    </td>
                     <td><code>{{ $k->slug }}</code></td>
                     <td>{{ $k->berita_count ?? 0 }}</td>
                     <td>
                         <div style="display: flex; gap: 5px;">
+                            @if(!$statusHeader)
                             <form action="/admin/berita/kategori/ke-menu/{{ $k->id }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="posisi" value="header">
@@ -45,6 +67,13 @@
                                     <i class="fas fa-heading"></i> Main Menu
                                 </button>
                             </form>
+                            @else
+                                <button class="btn" style="padding: 5px 10px; font-size: 0.75rem; background: #d1d5db; color: #9ca3af; cursor: not-allowed;" disabled>
+                                    <i class="fas fa-check"></i> Menu Header
+                                </button>
+                            @endif
+
+                            @if(!$statusFooter)
                             <form action="/admin/berita/kategori/ke-menu/{{ $k->id }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="posisi" value="footer">
@@ -52,6 +81,11 @@
                                     <i class="fas fa-shoe-prints"></i> Footer
                                 </button>
                             </form>
+                            @else
+                                <button class="btn" style="padding: 5px 10px; font-size: 0.75rem; background: #d1d5db; color: #9ca3af; cursor: not-allowed;" disabled>
+                                    <i class="fas fa-check"></i> Menu Footer
+                                </button>
+                            @endif
                         </div>
                     </td>
                     <td>

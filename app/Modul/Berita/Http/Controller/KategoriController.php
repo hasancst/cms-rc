@@ -12,7 +12,13 @@ class KategoriController extends Controller
     public function indeks()
     {
         $kategori = Kategori::latest()->get();
-        return view('berita::kategori.indeks', compact('kategori'));
+        
+        // Cek kategori mana saja yang sudah ada di menu
+        $menuKategori = Menu::where('url', 'like', '/berita/kategori/%')
+            ->get()
+            ->groupBy('url');
+
+        return view('berita::kategori.indeks', compact('kategori', 'menuKategori'));
     }
 
     public function simpan(Request $request)
