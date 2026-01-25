@@ -71,6 +71,7 @@
                     <option value="beranda">Beranda</option>
                     <option value="berita">Berita</option>
                     <option value="artikel">Artikel</option>
+                    <option value="video">Video</option>
                     <option value="kontak">Kontak</option>
                 </select>
 
@@ -305,6 +306,7 @@
 
         if (modul === 'beranda') { urlInput.value = '/'; labelInput.value = 'Beranda'; }
         else if (modul === 'kontak') { urlInput.value = '/kontak'; labelInput.value = 'Kontak'; }
+        else if (modul === 'video') { urlInput.value = '/video'; labelInput.value = 'Video'; }
         else if (modul === 'berita') {
             katBerita.style.display = 'block';
             const slug = document.getElementById('select-kategori-berita').value;
