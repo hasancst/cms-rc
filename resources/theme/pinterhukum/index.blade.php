@@ -153,15 +153,7 @@
 
             <!-- Side Column 2 (Boxes 4 & 5) -->
             <div class="hero-column">
-                @php 
-                    $side2 = $unggulan->skip(3)->take(2); 
-                    // Fill with latest if featured is less than 5
-                    if ($side2->count() < 2) {
-                        $needed = 2 - $side2->count();
-                        $extra = $beritaTerbaru->take($needed);
-                        $side2 = $side2->merge($extra);
-                    }
-                @endphp
+                @php $side2 = $unggulan->skip(3)->take(2); @endphp
                 @foreach($side2 as $u)
                 <div class="hero-item">
                     <a href="/berita/{{ $u->kategoris->first()->slug ?? 'umum' }}/{{ $u->slug }}">

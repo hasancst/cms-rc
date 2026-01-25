@@ -18,27 +18,32 @@ class PublicController extends Controller
         // Ambil data pengaturan
         $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
 
-        // Berita Unggulan (Featured)
+        // 1. Ambil Berita Unggulan (prioritas)
         $unggulan = Berita::with(['kategoris', 'tags'])
             ->where('unggulan', true)
             ->latest()
-            ->limit(3)
+            ->limit(5)
             ->get();
 
-        // Jika tidak ada berita unggulan, ambil berita terbaru
-        if ($unggulan->isEmpty()) {
-            $unggulan = Berita::with(['kategoris', 'tags'])
+        // 2. Jika kurang dari 5, ambil dari berita terbaru yang BUKAN unggulan
+        if ($unggulan->count() < 5) {
+            $excludeIds = $unggulan->pluck('id');
+            $tambahan = Berita::with(['kategoris', 'tags'])
+                ->whereNotIn('id', $excludeIds)
                 ->latest()
-                ->limit(3)
+                ->limit(5 - $unggulan->count())
                 ->get();
+            $unggulan = $unggulan->merge($tambahan);
         }
 
-        // Berita Terbaru
+        // 3. Berita Terbaru untuk feed (kecuali yang sudah masuk hero)
+        $heroIds = $unggulan->pluck('id');
         $beritaTerbaru = Berita::with(['kategoris', 'tags'])
+            ->whereNotIn('id', $heroIds)
             ->latest()
             ->paginate(10);
 
-        // Sidebar: Berita Terpopuler (Sederhana ambil terbaru)
+        // Sidebar: Berita Terpopuler
         $beritaPopuler = Berita::with('kategoris')->latest()->limit(5)->get();
 
         // Iklan Top Atas (jika ada modul iklan)
