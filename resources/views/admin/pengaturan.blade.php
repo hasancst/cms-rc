@@ -83,6 +83,10 @@
                         <input type="email" name="email_admin" value="{{ $pengaturan['email_admin'] ?? 'admin@rumahkoalisi.id' }}">
                     </div>
                     <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Nomor HP / WhatsApp</label>
+                        <input type="text" name="no_hp" value="{{ $pengaturan['no_hp'] ?? '' }}" placeholder="Contoh: 08123456789">
+                    </div>
+                    <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600;">Alamat Kantor</label>
                         <textarea name="alamat" rows="3">{{ $pengaturan['alamat'] ?? '' }}</textarea>
                     </div>

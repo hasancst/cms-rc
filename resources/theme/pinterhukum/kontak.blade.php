@@ -49,7 +49,7 @@
                         </div>
                         <div>
                             <div style="font-weight: 700; color: var(--text-main); margin-bottom: 5px;">Telepon / WA</div>
-                            <div style="color: var(--text-muted); font-size: 0.95rem;">+62 812 3456 789</div>
+                            <div style="color: var(--text-muted); font-size: 0.95rem;">{{ $pengaturan['no_hp'] ?? '+62 812 3456 789' }}</div>
                         </div>
                     </div>
 

@@ -663,7 +663,7 @@
                     <h4 class="widget-title">Kontak</h4>
                     <ul style="list-style: none; font-size: 0.9rem; line-height: 2; color: var(--text-muted);">
                         <li><i class="fas fa-envelope"></i> {{ $pengaturan['email_admin'] ?? 'kontak@pinterhukum.id' }}</li>
-                        <li><i class="fas fa-phone"></i> +62 812 3456 789</li>
+                        <li><i class="fas fa-phone"></i> {{ $pengaturan['no_hp'] ?? '+62 812 3456 789' }}</li>
                         <li><i class="fas fa-map-marker-alt"></i> {{ $pengaturan['alamat'] ?? 'Jakarta, Indonesia' }}</li>
                     </ul>
                 </div>
