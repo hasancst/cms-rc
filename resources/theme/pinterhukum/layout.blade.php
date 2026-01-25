@@ -560,6 +560,7 @@
             .hero-side { grid-template-columns: 1fr; }
             .post-card { flex-direction: column; }
             .post-card img { width: 100%; }
+            .footer-grid { grid-template-columns: 1fr; gap: 30px; }
             .logo span { font-size: 1.2rem; }
         }
     </style>

@@ -82,4 +82,15 @@ class KategoriController extends Controller
 
         return back()->with('berhasil', "Kategori '{$kategori->nama}' berhasil ditambahkan ke menu {$posisi}.");
     }
+
+    public function dariMenu(Request $request, $id)
+    {
+        $kategori = Kategori::findOrFail($id);
+        $posisi = $request->posisi ?? 'header';
+        $url = '/berita/kategori/' . $kategori->slug;
+
+        Menu::where('url', $url)->where('posisi', $posisi)->delete();
+
+        return back()->with('berhasil', "Kategori '{$kategori->nama}' berhasil dihapus dari menu {$posisi}.");
+    }
 }

@@ -42,15 +42,38 @@ class AdminController extends Controller
             $popularPages = DB::table('stat_pengunjung')
                 ->select('url', DB::raw('count(*) as total'))
                 ->where('url', 'like', '%/berita/%')
+                ->where('url', 'not like', '%.png%')
+                ->where('url', 'not like', '%.jpg%')
+                ->where('url', 'not like', '%.jpeg%')
+                ->where('url', 'not like', '%.webp%')
+                ->where('url', 'not like', '%.gif%')
+                ->where('url', 'not like', '%.svg%')
+                ->where('url', 'not like', '%.css%')
+                ->where('url', 'not like', '%.js%')
+                ->where('url', 'not like', '%.ico%')
                 ->groupBy('url')
                 ->orderByDesc('total')
                 ->limit(5)
                 ->get()
                 ->map(function($item) {
+                    // Extract path in case it's a full URL from another domain
+                    $parsed = parse_url($item->url);
+                    $path = $parsed['path'] ?? $item->url;
+                    
                     // Coba ambil judul berita dari slug di URL
-                    $slug = basename($item->url);
+                    $slug = basename($path);
                     $berita = DB::table('berita')->where('slug', $slug)->first();
-                    $item->judul = $berita ? $berita->judul : $slug;
+                    
+                    if ($berita) {
+                        $item->judul = $berita->judul;
+                        // reconstruct URL with current domain
+                        $item->url = url("berita/{$berita->kategori}/{$berita->slug}");
+                    } else {
+                        $item->judul = ucwords(str_replace(['-', '_'], ' ', $slug));
+                        // Ensure URL is relative to current domain
+                        $item->url = url($path);
+                    }
+                    
                     return $item;
                 });
         } catch (\Exception $e) {

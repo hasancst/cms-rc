@@ -29,7 +29,7 @@
         </div>
 
         <!-- Premium Breadcrumb -->
-        <nav style="margin-bottom: 25px; padding: 12px 20px; background: #fff; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+        <nav class="breadcrumb-nav" style="margin-bottom: 25px; padding: 12px 20px; background: #fff; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
             <a href="/" style="color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 600;">
                 <i class="fas fa-home" style="font-size: 0.8rem;"></i> Beranda
             </a>
@@ -52,7 +52,7 @@
                 @else
                     <span class="hero-tag">BERITA</span>
                 @endif
-                <h1 style="font-size: 2.5rem; margin-top: 15px; line-height: 1.2;">{{ $berita->judul }}</h1>
+                <h1 class="detail-title" style="font-size: 2.5rem; margin-top: 15px; line-height: 1.2;">{{ $berita->judul }}</h1>
                 
                 <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
                     <img src="https://ui-avatars.com/api/?name={{ urlencode($berita->penulis->nama ?? 'A') }}&background=014A7A&color=fff" style="width: 45px; height: 45px; border-radius: 50%;">
@@ -95,9 +95,9 @@
 
         <!-- Share Buttons -->
         <div style="margin-top: 30px; display: flex; gap: 10px;">
-            <a href="#" style="flex: 1; background: #3b5998; color: #fff; text-align: center; padding: 12px; border-radius: 8px; font-weight: 600;"><i class="fab fa-facebook-f"></i> Facebook</a>
-            <a href="#" style="flex: 1; background: #1da1f2; color: #fff; text-align: center; padding: 12px; border-radius: 8px; font-weight: 600;"><i class="fab fa-twitter"></i> Twitter</a>
-            <a href="#" style="flex: 1; background: #25d366; color: #fff; text-align: center; padding: 12px; border-radius: 8px; font-weight: 600;"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" style="flex: 1; background: #3b5998; color: #fff; text-align: center; padding: 12px; border-radius: 8px; font-weight: 600;"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}&text={{ urlencode($berita->judul) }}" target="_blank" style="flex: 1; background: #1da1f2; color: #fff; text-align: center; padding: 12px; border-radius: 8px; font-weight: 600;"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="https://wa.me/?text={{ urlencode($berita->judul . ' ' . request()->fullUrl()) }}" target="_blank" style="flex: 1; background: #25d366; color: #fff; text-align: center; padding: 12px; border-radius: 8px; font-weight: 600;"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         </div>
 
         <!-- Related News Section (Horizontal Grid with Thumbnails) -->
@@ -270,6 +270,11 @@
     .related-card-premium { transition: transform 0.2s; }
     .related-card-premium:hover { transform: translateY(-5px); }
     .related-card-premium h4:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+        .breadcrumb-nav { display: none !important; }
+        .detail-title { font-size: 1rem !important; }
+    }
 </style>
 @endsection
 

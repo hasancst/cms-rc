@@ -109,6 +109,7 @@
 
 @section('konten')
 
+@if($beritaTerbaru->onFirstPage())
 <!-- Featured Section (1 Main + 2 Side Columns = 5 Total) -->
 <section class="hero-section">
     <div class="container">
@@ -179,11 +180,11 @@
     <div class="container">
         <h3 style="font-size: 0.95rem; font-weight: 800; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
             <span style="width: 4px; height: 16px; background: var(--accent); border-radius: 2px;"></span>
-            BERITA TERBARU
+            TERPOPULER BULAN INI
         </h3>
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-                @foreach($beritaTerbaru->skip(5) as $bs)
+                @foreach($beritaPopulerBulanIni as $bs)
                     <div class="swiper-slide">
                         <div style="background: #fff; border: 1px solid #eee; border-radius: 10px; overflow: hidden; height: 100%;">
                             <a href="/berita/{{ $bs->kategoris->first()->slug ?? 'umum' }}/{{ $bs->slug }}">
@@ -208,29 +209,30 @@
         </div>
     </div>
 </section>
+@endif
 
 <!-- Section 3: Main Feed -->
 <section class="main-feed-section">
     <div class="container">
-        <div class="main-content" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+        <div class="main-content">
             <main>
-                <h2 class="section-title">Informasi Utama</h2>
+                <h2 class="section-title">Berita Terbaru</h2>
                 @forelse($beritaTerbaru as $b)
-                    <article class="post-card" style="display: flex; gap: 20px; margin-bottom: 25px; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #f1f5f9;">
+                    <article class="post-card">
                         <a href="/berita/{{ $b->kategoris->first()->slug ?? 'umum' }}/{{ $b->slug }}" style="flex-shrink: 0;">
                             @php
                                 $imgL = $b->gambar_utama;
                                 if ($imgL && !str_starts_with($imgL, 'http')) { $imgL = '/storage/' . $imgL; }
                                 if (!$imgL) { $imgL = 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80'; }
                             @endphp
-                            <img src="{{ $imgL }}" style="width: 220px; height: 150px; object-fit: cover;" alt="{{ $b->judul }}">
+                            <img src="{{ $imgL }}" alt="{{ $b->judul }}">
                         </a>
-                        <div style="padding: 15px;">
-                            <div style="font-size: 0.75rem; margin-bottom: 8px;">
+                        <div class="post-info">
+                            <div class="post-date">
                                 <span style="color: var(--primary); font-weight: 800;">{{ $b->kategoris->first()->nama ?? 'UMUM' }}</span>
                                 &bull; {{ $b->created_at->format('d M Y') }}
                             </div>
-                            <h3 style="margin: 0 0 10px; font-size: 1.1rem;"><a href="/berita/{{ $b->kategoris->first()->slug ?? 'umum' }}/{{ $b->slug }}">{{ $b->judul }}</a></h3>
+                            <h3 class="post-title"><a href="/berita/{{ $b->kategoris->first()->slug ?? 'umum' }}/{{ $b->slug }}">{{ $b->judul }}</a></h3>
                             <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">{{ str($b->ringkasan)->limit(100) }}</p>
                         </div>
                     </article>

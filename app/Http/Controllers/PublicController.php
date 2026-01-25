@@ -36,10 +36,37 @@ class PublicController extends Controller
             $unggulan = $unggulan->merge($tambahan);
         }
 
-        // 3. Berita Terbaru untuk feed (kecuali yang sudah masuk hero)
-        $heroIds = $unggulan->pluck('id');
+        // 3. Berita Populer Bulan Ini (untuk Slider)
+        $popularStats = DB::table('stat_pengunjung')
+            ->select(DB::raw("substring(url from 'berita/[^/]+/([^/?]+)') as slug"), DB::raw('count(*) as views'))
+            ->where('tanggal', '>=', now()->startOfMonth())
+            ->where('url', 'LIKE', '%/berita/%')
+            ->groupBy(DB::raw("substring(url from 'berita/[^/]+/([^/?]+)')"))
+            ->orderByDesc('views')
+            ->limit(10)
+            ->get();
+
+        $slugViews = $popularStats->pluck('views', 'slug')->toArray();
+        $orderedSlugs = array_keys($slugViews);
+
+        $popQuery = Berita::with(['kategoris', 'tags']);
+        
+        if (!empty($orderedSlugs)) {
+            $slugsStr = "'" . implode("','", $orderedSlugs) . "'";
+            $orderBy = "CASE ";
+            foreach ($slugViews as $slug => $view) {
+                // Sanitize slug
+                $slugSanitized = str_replace("'", "''", $slug); 
+                $orderBy .= "WHEN slug = '$slugSanitized' THEN $view ";
+            }
+            $orderBy .= "ELSE 0 END DESC";
+            $popQuery->orderByRaw($orderBy);
+        }
+
+        $beritaPopulerBulanIni = $popQuery->latest()->limit(10)->get();
+
+        // 4. Berita Terbaru untuk Main Feed
         $beritaTerbaru = Berita::with(['kategoris', 'tags'])
-            ->whereNotIn('id', $heroIds)
             ->latest()
             ->paginate(10);
 
@@ -101,7 +128,7 @@ class PublicController extends Controller
             $portfolioTags = collect($uniqueTags)->take(10);
         }
 
-        return view('tema::index', compact('pengaturan', 'unggulan', 'beritaTerbaru', 'beritaPopuler', 'iklanTop', 'videoTerbaru', 'slideshow', 'portofolios', 'faqs', 'layanans', 'portfolioTags'));
+        return view('tema::index', compact('pengaturan', 'unggulan', 'beritaTerbaru', 'beritaPopulerBulanIni', 'beritaPopuler', 'iklanTop', 'videoTerbaru', 'slideshow', 'portofolios', 'faqs', 'layanans', 'portfolioTags'));
     }
 
     public function detailBerita($kategori, $slug)

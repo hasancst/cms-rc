@@ -12,8 +12,11 @@ class CatatPengunjung
 {
     public function handle(Request $request, Closure $next)
     {
-        // Jangan catat request admin atau file statis
-        if (!$request->is('admin*') && !$request->expectsJson()) {
+        // Jangan catat request admin, API, atau file statis
+        $path = $request->path();
+        $isAsset = preg_match('/\.(jpg|jpeg|png|gif|svg|webp|ico|css|js|map)$/i', $path);
+
+        if (!$request->is('admin*') && !$request->expectsJson() && !$isAsset) {
             
             $ip = $request->ip();
             $countryData = session('visitor_geo_' . $ip);
@@ -41,7 +44,7 @@ class CatatPengunjung
                 'negara' => $countryData['negara'] ?? 'Unknown',
                 'kode_negara' => $countryData['kode_negara'] ?? '??',
                 'perangkat' => $request->header('User-Agent'),
-                'url' => $request->fullUrl(),
+                'url' => $request->url(),
                 'referensi' => $request->header('referer'),
                 'tanggal' => now()->toDateString(),
             ]);

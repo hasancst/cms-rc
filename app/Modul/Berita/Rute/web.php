@@ -28,4 +28,5 @@ Route::middleware(['web', 'auth'])->prefix('admin/berita')->group(function () {
     Route::post('/kategori/ubah/{id}', [KategoriController::class, 'perbarui']);
     Route::delete('/kategori/hapus/{id}', [KategoriController::class, 'hapus']);
     Route::post('/kategori/ke-menu/{id}', [KategoriController::class, 'keMenu']);
+    Route::post('/kategori/dari-menu/{id}', [KategoriController::class, 'dariMenu']);
 });

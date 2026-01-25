@@ -301,6 +301,10 @@
         .grid-layout { grid-template-columns: 1fr !important; }
         div[style*="grid-template-columns: repeat(2, 1fr)"] { grid-template-columns: 1fr !important; }
         .category-hero h1 { font-size: 2.2rem !important; }
+        .category-hero nav { display: none !important; }
+        .category-hero { padding: 50px 0 !important; }
+        .featured-card-premium > div { display: flex !important; flex-direction: column !important; }
+        .featured-card-premium img { height: 200px !important; }
     }
 </style>
 @endsection

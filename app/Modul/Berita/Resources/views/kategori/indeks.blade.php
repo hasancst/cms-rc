@@ -72,9 +72,13 @@
                                 </button>
                             </form>
                             @else
-                                <button class="btn" style="padding: 5px 10px; font-size: 0.75rem; background: #d1d5db; color: #9ca3af; cursor: not-allowed;" disabled>
-                                    <i class="fas fa-check"></i> Menu Header
+                            <form action="/admin/berita/kategori/dari-menu/{{ $k->id }}" method="POST" onsubmit="return confirm('Hapus dari menu header?')">
+                                @csrf
+                                <input type="hidden" name="posisi" value="header">
+                                <button type="submit" class="btn" style="padding: 5px 10px; font-size: 0.75rem; background: #ef4444; color: #fff;" title="Hapus dari Menu">
+                                    <i class="fas fa-trash"></i> Hapus Menu
                                 </button>
+                            </form>
                             @endif
 
                             @if(!$statusFooter)
@@ -86,9 +90,13 @@
                                 </button>
                             </form>
                             @else
-                                <button class="btn" style="padding: 5px 10px; font-size: 0.75rem; background: #d1d5db; color: #9ca3af; cursor: not-allowed;" disabled>
-                                    <i class="fas fa-check"></i> Menu Footer
+                            <form action="/admin/berita/kategori/dari-menu/{{ $k->id }}" method="POST" onsubmit="return confirm('Hapus dari menu footer?')">
+                                @csrf
+                                <input type="hidden" name="posisi" value="footer">
+                                <button type="submit" class="btn" style="padding: 5px 10px; font-size: 0.75rem; background: #ef4444; color: #fff;" title="Hapus dari Footer">
+                                    <i class="fas fa-trash"></i> Hapus Footer
                                 </button>
+                            </form>
                             @endif
                         </div>
                     </td>
