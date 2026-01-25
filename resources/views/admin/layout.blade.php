@@ -72,6 +72,21 @@
         .sidebar-nav {
             flex: 1;
             padding: 0 15px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-nav::-webkit-scrollbar {
+            width: 5px;
+        }
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 20px;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
         }
 
         .nav-item {
@@ -559,6 +574,12 @@
             @if(session('berhasil'))
                 <div class="alert">
                     <i class="fas fa-check-circle"></i> {{ session('berhasil') }}
+                </div>
+            @endif
+            
+            @if(session('error'))
+                <div class="alert" style="background: #fef2f2; color: #991b1b;">
+                    <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
                 </div>
             @endif
 

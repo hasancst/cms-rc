@@ -23,3 +23,5 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 .user.ini
+.imakecustom.com.code-workspace
+public/.user.ini

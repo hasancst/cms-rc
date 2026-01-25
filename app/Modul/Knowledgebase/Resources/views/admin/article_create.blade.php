@@ -20,6 +20,7 @@
             </div>
 
             <div>
+                @include('knowledgebase::admin.ai_assistant_kb')
                 <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; position: sticky; top: 100px;">
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600;">Kategori</label>

@@ -50,7 +50,11 @@
                     <div style="margin-bottom: 12px; position: relative;">
                         <label style="display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; color: rgba(255,255,255,0.9);">Instruksi Khusus (Opsional):</label>
                         <textarea id="ai-custom-prompt" rows="2" placeholder="Contoh: Gunakan gaya bahasa santai, perbanyak data teknis..." 
-                            style="width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 0.85rem; resize: none; transition: all 0.3s; font-family: inherit;"></textarea>
+                            style="width: 100%; padding: 12px; border-radius: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 0.85rem; resize: none; transition: all 0.3s; font-family: inherit; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);"></textarea>
+                        <style>
+                            #ai-custom-prompt::placeholder { color: rgba(255,255,255,0.6); }
+                            #ai-custom-prompt:focus { background: rgba(0,0,0,0.3) !important; border-color: rgba(255,255,255,0.5) !important; }
+                        </style>
                     </div>
                     <div style="margin-bottom: 18px; position: relative;">
                         <label style="display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; color: rgba(255,255,255,0.9);">Pilih Tindakan Utama:</label>

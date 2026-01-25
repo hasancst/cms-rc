@@ -67,4 +67,5 @@
     .kb-content code { background: #f1f5f9; padding: 3px 8px; border-radius: 5px; font-family: monospace; color: #e11d48; }
     .kb-content pre { background: #1e293b; color: #f8fafc; padding: 25px; border-radius: 15px; overflow-x: auto; margin: 30px 0; }
 </style>
+@include('knowledgebase::public.ai_assistant')
 @endsection

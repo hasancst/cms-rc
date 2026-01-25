@@ -13,4 +13,14 @@ class KBCategory extends Model
     {
         return $this->hasMany(KBArticle::class, 'category_id')->where('aktif', true)->orderBy('urutan');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(KBCategory::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(KBCategory::class, 'parent_id')->orderBy('urutan');
+    }
 }

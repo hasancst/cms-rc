@@ -49,6 +49,19 @@
                     <h3 style="margin-bottom: 15px;">{{ $cat->nama }}</h3>
                     <p style="color: #64748b; margin-bottom: 25px;">{{ $cat->deskripsi ?: 'Kumpulan panduan mengenai ' . $cat->nama }}</p>
                     <a href="/kb/category/{{ $cat->slug }}" class="btn-cmn btn-outline" style="border-radius: 50px; font-size: 14px;">Lihat {{ $cat->articles_count }} Artikel</a>
+                    
+                    @if($cat->children->isNotEmpty())
+                        <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: left;">
+                            <small style="font-weight: 600; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem;">Sub Kategori:</small>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+                                @foreach($cat->children as $child)
+                                    <a href="/kb/category/{{ $child->slug }}" style="background: #f1f5f9; padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; color: var(--purple-dark); text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='var(--primary)'; this.style.color='#fff';" onmouseout="this.style.background='#f1f5f9'; this.style.color='var(--purple-dark)';">
+                                        {{ $child->nama }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 @endforeach
             </div>
@@ -80,7 +93,5 @@
     </div>
 </section>
 
-<style>
-    .card:hover { transform: translateY(-10px); box-shadow: var(--shadow-hover); border-color: transparent !important; }
-</style>
+@include('knowledgebase::public.ai_assistant')
 @endsection
