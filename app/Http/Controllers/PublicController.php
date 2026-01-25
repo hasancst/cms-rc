@@ -9,6 +9,7 @@ use App\Modul\Berita\Model\Berita;
 use App\Modul\Artikel\Model\Artikel;
 
 use App\Modul\Video\Model\Video;
+use App\Modul\Berita\Model\Tag;
 
 class PublicController extends Controller
 {
@@ -144,8 +145,26 @@ class PublicController extends Controller
             ->latest()
             ->paginate(12);
 
-        $topBerita = Berita::latest()->limit(5)->get();
+        $topBerita = Berita::with('kategoris')->latest()->limit(5)->get();
         return view('tema::semua_berita', compact('pengaturan', 'beritaList', 'topBerita', 'kategori'));
+    }
+
+    public function tagBerita($slug)
+    {
+        $pengaturan = DB::table('pengaturan')->pluck('nilai', 'kunci')->toArray();
+        
+        $tag = Tag::where('slug', strtolower($slug))->first();
+        if (!$tag) abort(404);
+
+        $beritaList = Berita::whereHas('tags', function($q) use ($tag) {
+                $q->where('tag_berita.id', $tag->id);
+            })
+            ->with(['kategoris', 'tags', 'penulis'])
+            ->latest()
+            ->paginate(12);
+
+        $topBerita = Berita::with('kategoris')->latest()->limit(5)->get();
+        return view('tema::semua_berita', compact('pengaturan', 'beritaList', 'topBerita', 'tag'));
     }
 
     public function kategoriArtikel($slug)

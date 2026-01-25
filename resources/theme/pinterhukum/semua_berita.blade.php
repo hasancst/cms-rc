@@ -1,6 +1,6 @@
 @extends('tema::layout')
 
-@section('title', isset($kategori) ? 'Berita ' . $kategori->nama : 'Berita Terbaru')
+@section('title', isset($kategori) ? 'Berita ' . $kategori->nama : (isset($tag) ? 'Tag ' . $tag->nama : 'Berita Terbaru'))
 
 @section('konten')
 <!-- Category Hero Section - Full Width -->
@@ -23,6 +23,24 @@
             @else
                 Kumpulan informasi dan berita hukum terbaru serta terpercaya seputar {{ strtolower($kategori->nama) }} di Indonesia.
             @endif
+        </p>
+    </div>
+</div>
+@elseif(isset($tag))
+<div class="category-hero" style="background: linear-gradient(135deg, #059669 0%, #064e3b 100%); padding: 100px 0; margin-bottom: 50px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+    <div style="position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
+    
+    <div class="container" style="text-align: center; position: relative; z-index: 1;">
+        <nav style="font-size: 0.9rem; margin-bottom: 20px;">
+            <a href="/" style="color: rgba(255,255,255,0.8); font-weight: 600;">Beranda</a> 
+            <span style="color: rgba(255,255,255,0.4); margin: 0 15px;">/</span>
+            <a href="/berita" style="color: rgba(255,255,255,0.8); font-weight: 600;">Berita</a>
+            <span style="color: rgba(255,255,255,0.4); margin: 0 15px;">/</span>
+            <span style="color: #fff; font-weight: 700;">Tag</span>
+        </nav>
+        <h1 style="color: #fff; font-size: 4rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -2px;">#{{ $tag->nama }}</h1>
+        <p style="color: rgba(255,255,255,0.9); font-size: 1.25rem; max-width: 700px; margin: 0 auto; line-height: 1.6; font-weight: 500;">
+            Menampilkan semua berita dengan tagar #{{ strtolower($tag->nama) }} di Rumah Koalisi.
         </p>
     </div>
 </div>
