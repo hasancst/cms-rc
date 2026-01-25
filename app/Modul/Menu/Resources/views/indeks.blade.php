@@ -66,14 +66,25 @@
 
             <div id="opsi-modul" style="display: none; margin-bottom: 20px; background: #f1f5f9; padding: 15px; border-radius: 8px;">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Pilih Modul</label>
+                @php $activeSlugs = array_map('strtolower', $modulAktif ?? []); @endphp
                 <select id="pilih-modul" class="form-control" onchange="updateModuleUrl()" style="width: 100%;">
                     <option value="">-- Pilih Modul --</option>
                     <option value="beranda">Beranda</option>
-                    <option value="berita">Berita</option>
-                    <option value="artikel">Artikel</option>
-                    <option value="video">Video</option>
-                    <option value="portofolio">Portofolio</option>
-                    <option value="kontak">Kontak</option>
+                    @if(in_array('berita', $activeSlugs))
+                        <option value="berita">Berita</option>
+                    @endif
+                    @if(in_array('artikel', $activeSlugs))
+                        <option value="artikel">Artikel</option>
+                    @endif
+                    @if(in_array('video', $activeSlugs))
+                        <option value="video">Video</option>
+                    @endif
+                    @if(in_array('portofolio', $activeSlugs))
+                        <option value="portofolio">Portofolio</option>
+                    @endif
+                    @if(in_array('kontak', $activeSlugs))
+                        <option value="kontak">Kontak</option>
+                    @endif
                     <option value="tentang">Tentang Kami</option>
                     <option value="redaksi">Redaksi</option>
                     <option value="kebijakan">Kebijakan Privasi</option>
