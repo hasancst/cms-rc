@@ -19,11 +19,11 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
             <div>
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Kategori</label>
-                <select name="kategori" required>
-                    <option value="Teknis">Bantuan Teknis</option>
-                    <option value="Billing">Billing / Pembayaran</option>
-                    <option value="Fitur">Permintaan Fitur</option>
-                    <option value="Umum">Pertanyaan Umum</option>
+                <select name="category_id" required>
+                    <option value="">-- Pilih Kategori --</option>
+                    @foreach($categories as $cat)
+                        <option value="{{ $cat->id }}">{{ $cat->parent_id ? '↳ ' : '' }}{{ $cat->nama }}</option>
+                    @endforeach
                 </select>
             </div>
             <div>

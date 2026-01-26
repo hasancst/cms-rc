@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $pengaturan['nama_situs'] ?? 'CMS' }} - @yield('judul')</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css" rel="stylesheet">
     
@@ -35,7 +35,7 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
             display: flex;
@@ -99,6 +99,7 @@
             border-radius: 12px;
             margin-bottom: 5px;
             font-weight: 500;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
         }
 
@@ -116,6 +117,19 @@
             background: var(--primary);
             color: #ffffff;
             box-shadow: 0 4px 12px rgba(78, 115, 223, 0.2);
+        }
+
+        .nav-header {
+            padding: 25px 15px 10px 15px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .sidebar-footer {
@@ -396,6 +410,10 @@
             <a href="/admin" class="nav-item {{ request()->is('admin') ? 'active' : '' }}">
                 <i class="fas fa-th-large"></i> Dashboard
             </a>
+
+            {{-- Content Header --}}
+            <div class="nav-header"><i class="fas fa-layer-group"></i> Content CMS</div>
+
             @if(in_array('statistik', array_map('strtolower', $modulAktif)))
             <a href="/admin/statistik" class="nav-item {{ request()->is('admin/statistik*') ? 'active' : '' }}">
                 <i class="fas fa-chart-line"></i> Statistik
@@ -453,16 +471,10 @@
                 <i class="fas fa-concierge-bell"></i> Layanan
             </a>
             @endif
-            @if(in_array('tiket', array_map('strtolower', $modulAktif)))
-            <a href="/admin/tiket" class="nav-item {{ request()->is('admin/tiket*') ? 'active' : '' }}">
-                <i class="fas fa-ticket-alt"></i> Tiket
-            </a>
-            @endif
-            @if(in_array('task', array_map('strtolower', $modulAktif)))
-            <a href="/admin/task" class="nav-item {{ request()->is('admin/task*') ? 'active' : '' }}">
-                <i class="fas fa-tasks"></i> Task
-            </a>
-            @endif
+
+            {{-- Support Header Section --}}
+            <div class="nav-header"><i class="fas fa-life-ring"></i> Support</div>
+
             @if(in_array('knowledgebase', array_map('strtolower', $modulAktif)))
             <div class="nav-item-group">
                 <a href="#" class="nav-item {{ request()->is('admin/kb*') ? 'active' : '' }}" onclick="event.preventDefault(); var sub = document.getElementById('kb-submenu'); var icon = this.querySelector('.arrow-icon'); if(sub.style.display === 'none'){ sub.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { sub.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
@@ -480,6 +492,25 @@
                 </div>
             </div>
             @endif
+
+            @if(in_array('tiket', array_map('strtolower', $modulAktif)))
+            <div class="nav-item-group">
+                <a href="#" class="nav-item {{ request()->is('admin/tiket*') ? 'active' : '' }}" onclick="event.preventDefault(); var sub = document.getElementById('tiket-submenu'); var icon = this.querySelector('.arrow-icon'); if(sub.style.display === 'none'){ sub.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { sub.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span style="flex: 1;">Tiket Support</span>
+                    <i class="fas fa-chevron-down arrow-icon" style="font-size: 0.8rem; transition: transform 0.3s; transform: {{ request()->is('admin/tiket*') ? 'rotate(180deg)' : 'rotate(0deg)' }}"></i>
+                </a>
+                <div id="tiket-submenu" style="display: {{ request()->is('admin/tiket*') ? 'block' : 'none' }}; padding-left: 15px; overflow: hidden; transition: all 0.3s;">
+                    <a href="/admin/tiket" class="nav-item {{ request()->is('admin/tiket') || request()->is('admin/tiket/tambah') || request()->is('admin/tiket/detail*') ? 'active' : '' }}" style="font-size: 0.9rem;">
+                        <i class="fas fa-list" style="width: 18px;"></i> Semua Tiket
+                    </a>
+                    <a href="/admin/tiket/kategori" class="nav-item {{ request()->is('admin/tiket/kategori*') ? 'active' : '' }}" style="font-size: 0.9rem;">
+                        <i class="fas fa-tags" style="width: 18px;"></i> Kategori
+                    </a>
+                </div>
+            </div>
+            @endif
+
             @if(in_array('chat', array_map('strtolower', $modulAktif)))
             <div class="nav-item-group">
                 <a href="#" class="nav-item {{ request()->is('admin/chat*') ? 'active' : '' }}" onclick="event.preventDefault(); var sub = document.getElementById('chat-submenu'); var icon = this.querySelector('.arrow-icon'); if(sub.style.display === 'none'){ sub.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; } else { sub.style.display = 'none'; icon.style.transform = 'rotate(0deg)'; }">
@@ -497,6 +528,9 @@
                 </div>
             </div>
             @endif
+            {{-- System Header --}}
+            <div class="nav-header"><i class="fas fa-cogs"></i> System Config</div>
+
             <a href="/admin/modul" class="nav-item {{ request()->is('admin/modul*') ? 'active' : '' }}">
                 <i class="fas fa-cubes"></i> Modul
             </a>
@@ -520,6 +554,9 @@
             </a>
             <a href="/admin/pengguna" class="nav-item {{ request()->is('admin/pengguna*') ? 'active' : '' }}">
                 <i class="fas fa-users"></i> Pengguna
+            </a>
+            <a href="/admin/client" class="nav-item {{ request()->is('admin/client*') ? 'active' : '' }}">
+                <i class="fas fa-user-tie"></i> Client
             </a>
             <a href="/admin/pengaturan" class="nav-item {{ request()->is('admin/pengaturan*') ? 'active' : '' }}">
                 <i class="fas fa-cog"></i> Pengaturan

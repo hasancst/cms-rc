@@ -68,4 +68,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::post('/backup/hapus', [AdminController::class, 'hapusBackup']);
         Route::post('/backup/restore', [AdminController::class, 'restoreBackup']);
     });
+
+    // Client Management
+    Route::prefix('client')->group(function () {
+        Route::get('/', [App\Http\Controllers\ClientController::class, 'index']);
+        Route::get('/tambah', [App\Http\Controllers\ClientController::class, 'create']);
+        Route::post('/simpan', [App\Http\Controllers\ClientController::class, 'store']);
+        Route::get('/edit/{id}', [App\Http\Controllers\ClientController::class, 'edit']);
+        Route::post('/update/{id}', [App\Http\Controllers\ClientController::class, 'update']);
+        Route::post('/hapus/{id}', [App\Http\Controllers\ClientController::class, 'destroy']);
+    });
 });

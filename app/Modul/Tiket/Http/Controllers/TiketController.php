@@ -5,20 +5,37 @@ namespace App\Modul\Tiket\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modul\Tiket\Model\Tiket;
 use App\Modul\Tiket\Model\TiketPesan;
+use App\Modul\Tiket\Model\TiketKategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TiketController extends Controller
 {
-    public function indeks()
+    public function indeks(Request $request)
     {
-        $tikets = Tiket::orderBy('created_at', 'desc')->paginate(20);
-        return view('tiket::indeks', compact('tikets'));
+        $query = Tiket::with('kategori');
+
+        if ($request->filled('kategori_id')) {
+            $query->where('category_id', $request->kategori_id);
+        }
+
+        if ($request->filled('cari')) {
+            $query->where(function($q) use ($request) {
+                $q->where('judul', 'like', '%' . $request->cari . '%')
+                  ->orWhere('no_tiket', 'like', '%' . $request->cari . '%');
+            });
+        }
+
+        $tikets = $query->orderBy('created_at', 'desc')->paginate(20);
+        $categories = TiketKategori::where('aktif', true)->orderBy('urutan')->get();
+
+        return view('tiket::indeks', compact('tikets', 'categories'));
     }
 
     public function tambah()
     {
-        return view('tiket::tambah');
+        $categories = TiketKategori::where('aktif', true)->orderBy('urutan')->get();
+        return view('tiket::tambah', compact('categories'));
     }
 
     public function simpan(Request $request)
@@ -27,7 +44,7 @@ class TiketController extends Controller
             'judul' => 'required|string|max:255',
             'pesan' => 'required',
             'prioritas' => 'required|in:rendah,sedang,tinggi',
-            'kategori' => 'required',
+            'category_id' => 'required|exists:tiket_categories,id',
         ]);
 
         $noTiket = 'TKT-' . strtoupper(substr(uniqid(), 7));
@@ -37,7 +54,7 @@ class TiketController extends Controller
             'judul' => $request->judul,
             'user_id' => Auth::id(),
             'email' => Auth::user()->email,
-            'kategori' => $request->kategori,
+            'category_id' => $request->category_id,
             'prioritas' => $request->prioritas,
             'status' => 'terbuka',
             'pesan_awal' => $request->pesan,
@@ -48,11 +65,13 @@ class TiketController extends Controller
 
     public function detail($id)
     {
-        $tiket = Tiket::with(['pesans' => function($q) {
+        $tiket = Tiket::with(['kategori', 'pesans' => function($q) {
             $q->orderBy('created_at', 'asc');
         }])->findOrFail($id);
+        
+        $categories = TiketKategori::where('aktif', true)->orderBy('urutan')->get();
 
-        return view('tiket::detail', compact('tiket'));
+        return view('tiket::detail', compact('tiket', 'categories'));
     }
 
     public function balas(Request $request, $id)

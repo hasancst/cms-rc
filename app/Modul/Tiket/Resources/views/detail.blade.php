@@ -84,7 +84,7 @@
 
             <div style="margin-bottom: 20px;">
                 <label style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 5px;">Kategori</label>
-                <div style="font-weight: 600;">{{ $tiket->kategori }}</div>
+                <div style="font-weight: 600;">{{ $tiket->kategori->nama ?? 'Tanpa Kategori' }}</div>
             </div>
 
             <div style="margin-bottom: 30px;">

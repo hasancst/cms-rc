@@ -18,4 +18,9 @@ class Tiket extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
+
+    public function kategori()
+    {
+        return $this->belongsTo(TiketKategori::class, 'category_id');
+    }
 }
