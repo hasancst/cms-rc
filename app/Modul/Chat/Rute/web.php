@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Modul\Chat\Http\Controllers\ChatWidgetController;
+
+// Public Chat Widget API — exempt CSRF karena dipanggil dari domain eksternal (embed widget)
+// Autentikasi dilakukan via sessionToken di parameter/body, bukan cookie
+Route::prefix('api/chat')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])->group(function () {
+    Route::post('/init',     [ChatWidgetController::class, 'initSession']);
+    Route::post('/resume',   [ChatWidgetController::class, 'resumeOrCreate']);
+    Route::post('/message',  [ChatWidgetController::class, 'sendMessage']);
+    Route::get('/history/{sessionToken}', [ChatWidgetController::class, 'getHistory']);
+    Route::get('/poll/{sessionToken}',    [ChatWidgetController::class, 'poll']);
+    Route::post('/escalate', [ChatWidgetController::class, 'escalate']);
+    Route::post('/close',    [ChatWidgetController::class, 'closeSession']);
+    Route::post('/end',      [ChatWidgetController::class, 'endSession']);
+});
+
+// Admin Widget Management
+Route::prefix('admin/chat')->middleware(['web', 'auth'])->group(function () {
+    Route::get('/', [ChatWidgetController::class, 'index']);
+    Route::post('/widget/create', [ChatWidgetController::class, 'createWidget']);
+    Route::get('/sessions', [ChatWidgetController::class, 'listSessions']);
+    
+    // Agent API
+    Route::get('/api/active-sessions',          [ChatWidgetController::class, 'getAdminActiveSessions']);
+    Route::get('/api/messages/{sessionId}',     [ChatWidgetController::class, 'getAdminMessages']);
+    Route::get('/api/poll/{sessionId}',         [ChatWidgetController::class, 'pollAdminMessages']);
+    Route::post('/api/message',                 [ChatWidgetController::class, 'sendAdminMessage']);
+    Route::post('/api/close',                   [ChatWidgetController::class, 'adminCloseSession']);
+    Route::post('/api/escalate',                [ChatWidgetController::class, 'adminEscalateSession']);
+    Route::delete('/api/session/{sessionId}',   [ChatWidgetController::class, 'adminDeleteSession']);
+});
